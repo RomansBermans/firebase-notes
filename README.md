@@ -1,4 +1,4 @@
-# firebase-mocha-chai-targaryen [![Build Status](https://travis-ci.org/RomansBermans/firebase-mocha-chai-targaryen.svg?branch=master)](https://travis-ci.org/RomansBermans/firebase-mocha-chai-targaryen)
+# firebase-notes [![Build Status](https://travis-ci.org/RomansBermans/firebase-notes.svg?branch=master)](https://travis-ci.org/RomansBermans/firebase-notes)
 
 Test a Firebase application with [Mocha](https://mochajs.org/), [Chai](http://chaijs.com/) and [Targaryen](https://github.com/goldibex/targaryen).
 
@@ -13,6 +13,8 @@ Test a Firebase application with [Mocha](https://mochajs.org/), [Chai](http://ch
 <br/><img src="https://cloud.githubusercontent.com/assets/358467/21387907/2b149dda-c77a-11e6-8ccf-d5e9401d8e06.png" width="703" />
 4. If using Travis CI:
     1. Create an account on [Travis CI](https://travis-ci.org/) and activate your repository
+    2. Execute `firebase login:ci`
+    3. Add FIREBASE_TOKEN to Settings > Environment Variables
 
 ## Install
 ```
