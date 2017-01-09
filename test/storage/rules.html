@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <title>Test: Storage</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../node_modules/mocha/mocha.css" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="../../node_modules/mocha/mocha.js"></script>
+    <script src="../../node_modules/chai/chai.js"></script>
+    <script>
+      const expect = chai.expect;
+      mocha.ui('bdd');
+      mocha.slow(1000);
+      mocha.timeout(10000);
+    </script>
+    <script src="../../node_modules/firebase/firebase.js"></script>
+    <script src="../../environment/firebase.client.dev.config.js"></script>
+    <script src="../../environment/firebase.client.test.config.js"></script>
+    <script src="../helper.js"></script>
+    <script src="rules.js"></script>
+    <script>
+      mocha.run();
+    </script>
+  </body>
+</html>
+

@@ -1,0 +1,83 @@
+uid() { auth.uid }
+
+email() { auth.email }
+
+
+anon() { uid() != null }
+
+auth() { anon() && email() != null }
+
+
+authUid(v) { auth() && v == uid() }
+
+authEmail(v) { auth() && v == email() }
+
+
+initial(v) { prior(v) == null }
+
+previous(v) { v == prior(v) }
+
+
+now(v) { v == now }
+
+
+/************************************************
+ * TYPES
+ ************************************************/
+
+
+type AuthUid extends Text {
+  validate() { initial(this) ?  authUid(this) : previous(this) }
+}
+
+
+/************************************************/
+
+
+type Text extends String {
+  validate() { this.length > 0 }
+}
+
+type Created extends Number {
+  validate() { initial(this) ? now(this) : previous(this) }
+}
+
+type Modified extends Number {
+  validate() { now(this) }
+}
+
+type Visibilty extends Text {
+  validate() { this.test(/^(authenticated|public)$/) }
+}
+
+
+/************************************************
+ * MODELS
+ ************************************************/
+
+
+type Note {
+  creator: AuthUid,
+  created: Created,
+  modified: Modified,
+  title: Text | Null,
+  text: Text,
+  visibilty: Visibilty | Null,
+}
+
+
+/************************************************
+ * PATHS
+ ************************************************/
+
+
+path /notes {
+  path /{user} {
+    read() { authUid($user) }
+
+    path /{note} is Note {
+      read() { (auth() && this.visibilty == 'authenticated') || this.visibilty == 'public'  }
+      write() { authUid($user) }
+    }
+  }
+}

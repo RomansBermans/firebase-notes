@@ -1,0 +1,65 @@
+{
+  "name": "firebase-mocha-chai-targaryen",
+  "version": "0.0.0-alpha.0",
+  "scripts": {
+    "test:database": "mocha test/database --reporter spec --ui bdd --slow 50 --timeout 5000",
+
+    "pretest:storage": "node -e \"require('./init').deploy('storage')\"",
+    "test:storage": "phantomjs --web-security=no node_modules/mocha-phantomjs-core/mocha-phantomjs-core.js test/storage/rules.html spec '{\"useColors\": true, \"ignoreResourceErrors\": true}'",
+
+    "pretest": "eslint --ignore-path .gitignore . && node -e \"require('./init').patch.firebase()\"",
+    "test": "npm run test:database && npm run test:storage",
+
+
+    "deploy:database": "firebase deploy --only database --project $PROJECT",
+
+    "predeploy:storage": "node -e \"require('./init').prepare.storage('$PROJECT')\"",
+    "deploy:storage": "firebase deploy --only storage --project $PROJECT",
+
+    "deploy": "npm run deploy:database npm run deploy:storage",
+
+
+    "clean": "npm prune",
+    "outdated": "npm outdated --depth=0",
+
+    "postversion": "git push && git push --tags"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^3.11.0",
+    "eslint-config-airbnb-base": "^11.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "firebase": "^3.6.3",
+    "firebase-bolt": "^0.8.1",
+    "firebase-tools": "^3.2.0",
+    "mocha": "^3.1.2",
+    "mocha-phantomjs-core": "^2.1.0",
+    "phantomjs-prebuilt": "^2.1.13",
+    "shelljs": "^0.7.5",
+    "targaryen": "^2.3.3"
+  },
+  "eslintConfig": {
+    "extends": "airbnb-base",
+    "env": {
+      "mocha": true
+    },
+    "rules": {
+      "arrow-parens": ["error", "as-needed"],
+      "comma-dangle": ["error", "always-multiline"],
+      "import/no-dynamic-require": "off",
+      "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+      "max-len": ["error", 240],
+      "no-param-reassign": ["error", { "props": false }]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:RomansBermans/firebase-mocha-chai-targaryen.git"
+  },
+  "bugs": {
+    "url": "https://github.com/RomansBermans/firebase-mocha-chai-targaryen/issues"
+  },
+  "homepage": "https://github.com/RomansBermans/firebase-mocha-chai-targaryen",
+  "author": "Romans Bermans <romans.bermans@gmail.com>",
+  "license": "ISC"
+}

@@ -1,0 +1,10 @@
+.DS_Store
+
+.vscode
+node_modules
+
+environment/*.dev*
+
+*.es5.js
+
+*.log

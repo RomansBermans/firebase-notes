@@ -1,0 +1,31 @@
+language: node_js
+node_js:
+- '6.9'
+
+cache:
+  directories:
+  - node_modules
+
+before_script:
+- export NODE_ENV="test"
+
+- export VERSION="$(node -p -e "require('./package').version")-$TRAVIS_BUILD_NUMBER"
+- export MESSAGE="$VERSION $(git log --format=%B --no-merges -n 1)"
+- export VERSION="${VERSION//[^[:alnum:]^-]}"
+
+- export ENVIRONMENT="$(node -p -e "JSON.parse('{\"master\":\"prod\",\"develop\":\"stag\"}').${TRAVIS_BRANCH:-undefined} || ''")"
+
+- if [[ "$ENVIRONMENT" ]]; then
+    export PROJECT="$(node -p -e "require('./environment/settings.$ENVIRONMENT').project.id")";
+  fi
+
+- if [[ "$PROJECT" ]]; then
+    export DEPLOY="$(node -p -e "/\[deploy\]/.test('$MESSAGE')")";
+  fi
+
+- echo BRANCH=${TRAVIS_BRANCH:-undefined}$'\n'MESSAGE=${MESSAGE:-undefined}$'\n'ENVIRONMENT=${ENVIRONMENT:-undefined}$'\n'PROJECT=${PROJECT:-undefined}$'\n'VERSION=${VERSION:-undefined}
+
+after_success:
+- if [[ "$DEPLOY" = true ]]; then
+    npm run deploy;
+  fi

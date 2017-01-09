@@ -1,0 +1,29 @@
+function uid() { return request.auth.uid; }
+
+function email() { return request.auth.token.email; }
+
+
+function anon() { return uid() != null; }
+
+function auth() { return anon() && email() != null; }
+
+
+function authUid(v) { return auth() && v == uid(); }
+
+function authEmail(v) { return auth() && v == email(); }
+
+
+function imageMaxSize(file, max) {
+  return request.resource.contentType.matches('image/.*')
+      && request.resource.size <= max * 1024 * 1024;
+}
+
+
+service firebase.storage {
+  match /b/prototype-9c221.appspot.com/o {
+    match /notes/{user}/{note}/{image} {
+      allow read: if authUid(user) || (auth() && resource.metadata.visibilty == 'authenticated') || resource.metadata.visibilty == 'public';
+      allow write: if authUid(user) && imageMaxSize(image, 4);
+    }
+  }
+}

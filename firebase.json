@@ -1,0 +1,8 @@
+{
+  "database": {
+    "rules": "database/rules.bolt"
+  },
+  "storage": {
+    "rules": "storage/rules.fire"
+  }
+}
