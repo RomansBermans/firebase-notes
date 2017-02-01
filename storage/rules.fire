@@ -3,9 +3,9 @@ function uid() { return request.auth.uid; }
 function email() { return request.auth.token.email; }
 
 
-function anon() { return uid() != null; }
+function anon() { return uid() == null; }
 
-function auth() { return anon() && email() != null; }
+function auth() { return !anon() && email() != null; }
 
 
 function authUid(v) { return auth() && v == uid(); }
@@ -13,17 +13,45 @@ function authUid(v) { return auth() && v == uid(); }
 function authEmail(v) { return auth() && v == email(); }
 
 
-function imageMaxSize(file, max) {
-  return request.resource.contentType.matches('image/.*')
-      && request.resource.size <= max * 1024 * 1024;
+function fileAllowed(name, size) {
+  return name.matches("^[0-9]{9,}.*")
+      && request.resource.contentType.matches('image/.*')
+      && request.resource.size <= size * 1024 * 1024;
+}
+
+function metadataAllowed() {
+  return request.resource.metadata == null
+      || (
+              !('visibility' in request.resource.metadata)
+           || request.resource.metadata.visibility in ['authenticated', 'public']
+         );
 }
 
 
 service firebase.storage {
   match /b/prototype-9c221.appspot.com/o {
+    match /public/{image} {
+      allow read: if authUid(resource.metadata.creator)
+                  || (auth() && resource.metadata.visibility == 'authenticated')
+                  || resource.metadata.visibility == 'public';
+      allow write: if auth()
+                   && (
+                        (resource == null && fileAllowed(image, 4) && metadataAllowed() && authUid(request.resource.metadata.creator))
+                     || (resource != null && request.resource == null && authUid(resource.metadata.creator))
+                     || (resource != null && resource.crc32c == request.resource.crc32c && metadataAllowed() && authUid(resource.metadata.creator))
+                   );
+    }
+
     match /notes/{user}/{note}/{image} {
-      allow read: if authUid(user) || (auth() && resource.metadata.visibilty == 'authenticated') || resource.metadata.visibilty == 'public';
-      allow write: if authUid(user) && imageMaxSize(image, 4);
+      allow read: if authUid(user)
+                  || (auth() && resource.metadata.visibility == 'authenticated')
+                  || resource.metadata.visibility == 'public';
+      allow write: if authUid(user)
+                   && (
+                        (resource == null && fileAllowed(image, 4) && metadataAllowed())
+                     || (resource != null && request.resource == null)
+                     || (resource != null && resource.crc32c == request.resource.crc32c && metadataAllowed())
+                   );
     }
   }
 }

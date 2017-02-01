@@ -1,7 +1,10 @@
-/* eslint-disable no-undef, no-unused-vars, func-names, prefer-arrow-callback, object-shorthand */
+/* eslint-disable no-undef, no-unused-vars */
 
 const $ = {
-  logout: undefined,
+  logout: () =>
+    firebase
+    .auth()
+    .signOut(),
   login: undefined,
   data: {
     timestamp: { '.sv': 'timestamp' },
@@ -9,53 +12,58 @@ const $ = {
 };
 
 
-$.logout = function () {
-  return firebase.auth()
-  .signOut();
-};
-
-$.login = function (email, password) {
-  return $.logout()
-  .then(function () {
+$.login = (email, password) =>
+  $.logout()
+  .then(() => {
     if (email && password) {
-      return firebase.auth()
+      return firebase
+      .auth()
       .signInWithEmailAndPassword(email, password);
     }
 
-    return firebase.auth().signInAnonymously();
+    return firebase
+    .auth()
+    .signInAnonymously();
   })
-  .catch(function (err) {
+  .catch(err => {
     if (email && password) {
-      return firebase.auth()
+      return firebase
+      .auth()
       .createUserWithEmailAndPassword(email, password);
     }
 
     throw err;
   });
-};
 
 
 $.data.model = {
-  note: function (data) {
-    return {
+  public: data =>
+    ({
+      creator: data.user.uid,
+      title: 'Title',
+      visibility: data.visibility || null,
+    }),
+  note: data =>
+    ({
       creator: data.user.uid,
       created: $.data.timestamp,
       modified: $.data.timestamp,
       title: 'Title',
       text: 'Text',
-      visibilty: data.visibilty || null,
-    };
-  },
+      visibility: data.visibility || null,
+    }),
 };
 
 
 $.data.initial = {
+  public: {
+    p1: $.data.model.public({ user: { uid: 'u1' } }),
+    p2: $.data.model.public({ user: { uid: 'u1' }, visibility: 'authenticated' }),
+    p3: $.data.model.public({ user: { uid: 'u1' }, visibility: 'public' }),
+  },
   notes: {
-    1: {
-      1: $.data.model.note({ user: { uid: '1' } }),
-    },
-    2: {
-      2: $.data.model.note({ user: { uid: '2' } }),
+    u1: {
+      n1: $.data.model.note({ user: { uid: 'u1' } }),
     },
   },
 };

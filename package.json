@@ -1,14 +1,17 @@
 {
-  "name": "firebase-mocha-chai-targaryen",
+  "name": "firebase-notes",
   "version": "0.0.0-alpha.0",
   "scripts": {
+    "pretest:client": "node -e \"require('./init').deploy('database')\" && babel test/helper.js --out-file test/helper.es5.js, test/client/rules.js --out-file test/client/rules.es5.js",
+    "test:client": "phantomjs --web-security=no node_modules/mocha-phantomjs-core/mocha-phantomjs-core.js test/client/rules.html spec '{\"useColors\": true, \"ignoreResourceErrors\": true}'",
+
     "test:database": "mocha test/database --reporter spec --ui bdd --slow 50 --timeout 5000",
 
-    "pretest:storage": "node -e \"require('./init').deploy('storage')\"",
+    "pretest:storage": "node -e \"require('./init').deploy('storage')\" && babel test/helper.js --out-file test/helper.es5.js, test/storage/rules.js --out-file test/storage/rules.es5.js",
     "test:storage": "phantomjs --web-security=no node_modules/mocha-phantomjs-core/mocha-phantomjs-core.js test/storage/rules.html spec '{\"useColors\": true, \"ignoreResourceErrors\": true}'",
 
     "pretest": "eslint --ignore-path .gitignore . && node -e \"require('./init').patch.firebase()\"",
-    "test": "npm run test:database && npm run test:storage",
+    "test": "npm run test:client && npm run test:database && npm run test:storage",
 
 
     "deploy:database": "firebase deploy --only database --project $PROJECT",
@@ -25,18 +28,23 @@
     "postversion": "git push && git push --tags"
   },
   "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-preset-es2015": "^6.22.0",
     "chai": "^3.5.0",
     "eslint": "^3.11.0",
     "eslint-config-airbnb-base": "^11.0.0",
     "eslint-plugin-import": "^2.2.0",
-    "firebase": "^3.6.3",
+    "firebase": "^3.6.7",
     "firebase-bolt": "^0.8.1",
-    "firebase-tools": "^3.2.0",
+    "firebase-tools": "^3.2.1",
     "mocha": "^3.1.2",
-    "mocha-phantomjs-core": "^2.1.0",
-    "phantomjs-prebuilt": "^2.1.13",
+    "mocha-phantomjs-core": "^2.1.1",
+    "phantomjs-prebuilt": "^2.1.14",
     "shelljs": "^0.7.5",
-    "targaryen": "^2.3.3"
+    "targaryen": "^3.0.1"
+  },
+  "babel": {
+    "presets": ["es2015"]
   },
   "eslintConfig": {
     "extends": "airbnb-base",
@@ -54,12 +62,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:RomansBermans/firebase-mocha-chai-targaryen.git"
+    "url": "git@github.com:RomansBermans/firebase-notes.git"
   },
   "bugs": {
-    "url": "https://github.com/RomansBermans/firebase-mocha-chai-targaryen/issues"
+    "url": "https://github.com/RomansBermans/firebase-notes/issues"
   },
-  "homepage": "https://github.com/RomansBermans/firebase-mocha-chai-targaryen",
+  "homepage": "https://github.com/RomansBermans/firebase-notes",
   "author": "Romans Bermans <romans.bermans@gmail.com>",
   "license": "ISC"
 }
