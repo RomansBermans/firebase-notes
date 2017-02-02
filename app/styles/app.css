@@ -1,0 +1,50 @@
+[v-cloak] {
+  display: none;
+}
+
+
+#app .md-image.md-loaded {
+  transition: none;
+}
+
+
+#app .md-snackbar .md-button {
+    margin: -8px -22px;
+}
+
+
+#app .auth form {
+  margin: 30px;
+  text-align: center;
+}
+#app .auth form > .md-button{
+  width: 100%;
+  margin: 25px 0;
+}
+#app .auth form > .md-layout {
+  margin: 20px 0;
+}
+
+
+#app .main {
+  padding: 64px 0 0 0;
+}
+
+#app .main header {
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+#app .main .md-list .md-list-item-holder .md-icon {
+  margin: 6px;
+}
+#app .main .md-list .md-list-text-container .text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}

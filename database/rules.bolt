@@ -56,18 +56,10 @@ type Visibility extends Text {
  ************************************************/
 
 
-type Public {
-  creator: AuthUid,
-  title: Text | Null,
-  visibility: Visibility | Null,
-}
-
-
 type Note {
   creator: AuthUid,
   created: Created,
   modified: Modified,
-  title: Text | Null,
   text: Text,
   visibility: Visibility | Null,
 }
@@ -79,12 +71,12 @@ type Note {
 
 
 path /public {
-  path /{public} is Public {
+  path /{public} is Note {
     read() {
-                authUid(this.creator)
-             || (auth() && this.visibility == 'authenticated')
-             || this.visibility == 'public'
-           }
+         authUid(this.creator)
+      || (auth() && this.visibility == 'authenticated')
+      || this.visibility == 'public'
+    }
     create() { auth() }
     update() { auth() }
     delete() { auth() && authUid(prior(this).creator) }
@@ -98,9 +90,9 @@ path /notes {
 
     path /{note} is Note {
       read() {
-                  (auth() && this.visibility == 'authenticated')
-               || this.visibility == 'public'
-             }
+           (auth() && this.visibility == 'authenticated')
+        || this.visibility == 'public'
+      }
       create() { authUid($user) }
       update() { authUid($user) }
       delete() { authUid($user) }

@@ -3,6 +3,8 @@
 .vscode
 node_modules
 
+app/dist
+
 environment/*.dev*
 
 *.es5.js

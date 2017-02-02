@@ -2,8 +2,11 @@
   "name": "firebase-notes",
   "version": "0.0.0-alpha.0",
   "scripts": {
-    "pretest:client": "node -e \"require('./init').deploy('database')\" && babel test/helper.js --out-file test/helper.es5.js, test/client/rules.js --out-file test/client/rules.es5.js",
-    "test:client": "phantomjs --web-security=no node_modules/mocha-phantomjs-core/mocha-phantomjs-core.js test/client/rules.html spec '{\"useColors\": true, \"ignoreResourceErrors\": true}'",
+    "start": "firebase serve",
+
+
+    "pretest:app": "node -e \"require('./init').deploy('database')\" && babel test/helper.js --out-file test/helper.es5.js, test/app/rules.js --out-file test/app/rules.es5.js",
+    "test:app": "phantomjs --web-security=no node_modules/mocha-phantomjs-core/mocha-phantomjs-core.js test/app/rules.html spec '{\"useColors\": true, \"ignoreResourceErrors\": true}'",
 
     "test:database": "mocha test/database --reporter spec --ui bdd --slow 50 --timeout 5000",
 
@@ -11,21 +14,20 @@
     "test:storage": "phantomjs --web-security=no node_modules/mocha-phantomjs-core/mocha-phantomjs-core.js test/storage/rules.html spec '{\"useColors\": true, \"ignoreResourceErrors\": true}'",
 
     "pretest": "eslint --ignore-path .gitignore . && node -e \"require('./init').patch.firebase()\"",
-    "test": "npm run test:client && npm run test:database && npm run test:storage",
+    "test": "npm run test:app && npm run test:database && npm run test:storage",
 
+
+    "deploy:app": "firebase deploy --only hosting --project $PROJECT --message \"${MESSAGE:- }\"",
 
     "deploy:database": "firebase deploy --only database --project $PROJECT",
 
     "predeploy:storage": "node -e \"require('./init').prepare.storage('$PROJECT')\"",
     "deploy:storage": "firebase deploy --only storage --project $PROJECT",
 
-    "deploy": "npm run deploy:database npm run deploy:storage",
-
-
-    "clean": "npm prune",
-    "outdated": "npm outdated --depth=0",
-
-    "postversion": "git push && git push --tags"
+    "deploy": "npm npm run deploy:database npm run deploy:storage"
+  },
+  "dependencies": {
+    "vue": "^2.1.10"
   },
   "devDependencies": {
     "babel-cli": "^6.22.2",
@@ -34,7 +36,7 @@
     "eslint": "^3.11.0",
     "eslint-config-airbnb-base": "^11.0.0",
     "eslint-plugin-import": "^2.2.0",
-    "firebase": "^3.6.7",
+    "firebase": "^3.6.8",
     "firebase-bolt": "^0.8.1",
     "firebase-tools": "^3.2.1",
     "mocha": "^3.1.2",

@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+
+    <title>Notes</title>
+
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+
+    <link rel="stylesheet" href="./styles/vue-material.css" />
+    <link rel="stylesheet" href="./styles/app.css" />
+
+    <script src="./scripts/vue.js"></script>
+    <script src="./scripts/vuefire.js"></script>
+    <script src="./scripts/vue-material.js"></script>
+
+    <script src="./scripts/firebase.js"></script>
+  </head>
+
+  <body>
+    <div id="app" v-cloak>
+
+      <section v-show="view === 'auth'" class="auth">
+        <auth ref="auth" @user="setUser($event)" @action="setInfo()" @message="setInfo($event)"></auth>
+      </section>
+
+      <section v-if="view === 'main'" class="main">
+        <header>
+          <md-toolbar>
+            <md-button @click="$refs.sidebar.open()" class="md-icon-button" >
+              <md-icon>menu</md-icon>
+            </md-button>
+
+            <h2 class="md-title" style="flex:1">Notes</h2>
+
+            <md-button @click="" class="md-icon-button">
+              <md-icon>add</md-icon>
+            </md-button>
+          </md-toolbar>
+
+          <md-sidenav ref="sidebar" @open="setInfo()" class="md-left md-fixed">
+            <md-toolbar class="md-account-header">
+              <md-list class="md-transparent">
+                <md-list-item>
+                  <md-avatar class="md-avatar-icon md-large">
+                    <md-image v-if="user.photoURL" :md-src="user.photoURL"></md-image>
+                    <md-icon v-else>person</md-icon>
+                  </md-avatar>
+                </md-list-item>
+                <md-list-item>
+                  <div class="md-list-text-container">
+                    <span>{{ user.displayName }}</span>
+                    <span>{{ user.email }}</span>
+                  </div>
+                </md-list-item>
+              </md-list>
+            </md-toolbar>
+
+            <md-list>
+              <md-list-item @click="$refs.auth.signOut()">
+                <span>Sign Out</span>
+              </md-list-item>
+            </md-list>
+          </md-sidenav>
+        </header>
+
+        <main>
+          <notes :path="`notes/${(user || {}).uid}`" :size="25" order="modified" :visible="view === 'notes'"></notes>
+        </main>
+      </section>
+
+      <md-snackbar ref="snackbar" @close="theme = undefined" md-position="bottom center" :md-duration="3000">
+        <span>{{ info }}</span>
+        <md-button @click="$refs.snackbar.close()"><md-icon>close</md-icon></md-button>
+      </md-snackbar>
+
+    </div>
+
+    <script src="./scripts/app.js"></script>
+  </body>
+
+</html>
+

@@ -4,5 +4,14 @@
   },
   "storage": {
     "rules": "storage/rules.fire"
+  },
+  "hosting": {
+    "public": "app",
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
   }
 }

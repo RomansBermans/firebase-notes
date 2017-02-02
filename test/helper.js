@@ -1,5 +1,6 @@
 /* eslint-disable no-undef, no-unused-vars */
 
+
 const $ = {
   logout: () =>
     firebase
@@ -36,19 +37,15 @@ $.login = (email, password) =>
   });
 
 
+/* ************************************************************ */
+
+
 $.data.model = {
-  public: data =>
-    ({
-      creator: data.user.uid,
-      title: 'Title',
-      visibility: data.visibility || null,
-    }),
   note: data =>
     ({
       creator: data.user.uid,
       created: $.data.timestamp,
       modified: $.data.timestamp,
-      title: 'Title',
       text: 'Text',
       visibility: data.visibility || null,
     }),
@@ -57,9 +54,9 @@ $.data.model = {
 
 $.data.initial = {
   public: {
-    p1: $.data.model.public({ user: { uid: 'u1' } }),
-    p2: $.data.model.public({ user: { uid: 'u1' }, visibility: 'authenticated' }),
-    p3: $.data.model.public({ user: { uid: 'u1' }, visibility: 'public' }),
+    p1: $.data.model.note({ user: { uid: 'u1' } }),
+    p2: $.data.model.note({ user: { uid: 'u1' }, visibility: 'authenticated' }),
+    p3: $.data.model.note({ user: { uid: 'u1' }, visibility: 'public' }),
   },
   notes: {
     u1: {
@@ -67,6 +64,9 @@ $.data.initial = {
     },
   },
 };
+
+
+/* ************************************************************ */
 
 
 if (typeof module === 'object' && module.exports) {

@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign, no-undef */
 
+
 const config = mocha.env && /test/.test(mocha.env.NODE_ENV) ? FIREBASE_CLIENT_TEST_CONFIG : FIREBASE_CLIENT_DEV_CONFIG;
 
 
