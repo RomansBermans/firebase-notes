@@ -52,7 +52,7 @@
   position: absolute;
   top: 0;
   height: 100%;
-  width: 307px;
+  width: 100%;
   padding: 88px 16px 30px;
   border: none;
   outline: none;
@@ -63,5 +63,7 @@
 }
 
 #app .main main .md-item .md-button {
+  position: fixed;
+  top: 82px;
   right: 12px;
 }

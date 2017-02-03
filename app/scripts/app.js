@@ -173,7 +173,7 @@ const Auth = {
     signUp() {
       const profile = {
         displayName: this.name,
-        photoURL: `https://unsplash.it/300/?image=${Math.round(Math.random() * 1000)}`,
+        photoURL: 'https://unsplash.it/300/?random',
       };
 
       firebase
@@ -325,7 +325,7 @@ const Notes = {
       </div>
       <div v-else class="md-item">
         <textarea ref="text" v-model="active.modified.text" type="text" placeholder="Type here..." rows="1" class="md-text"></textarea>
-        <md-button @click="set()" class="md-fab md-fab-bottom-right md-icon-button md-raised md-dense">
+        <md-button @click="set()" class="md-fab md-icon-button md-raised md-dense">
           <md-icon>done</md-icon>
         </md-button>
       </div>
