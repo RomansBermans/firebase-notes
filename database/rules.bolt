@@ -71,6 +71,8 @@ type Note {
 
 
 path /public {
+  index() { ['modified'] }
+
   path /{public} is Note {
     read() {
          authUid(this.creator)
@@ -86,6 +88,7 @@ path /public {
 
 path /notes {
   path /{user} {
+    index() { ['modified'] }
     read() { authUid($user) }
 
     path /{note} is Note {

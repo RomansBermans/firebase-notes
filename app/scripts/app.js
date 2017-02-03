@@ -38,8 +38,13 @@ Vue.use(VueMaterial);
 
 const themes = {
   default: {
-    primary: 'teal',
+    primary: 'black',
     accent: 'grey',
+    warn: 'red',
+  },
+  minimal: {
+    primary: 'white',
+    accent: 'black',
     warn: 'red',
   },
   error: {
@@ -60,7 +65,10 @@ Vue.filter('capitalize', v => v.match(/[A-z][a-z]+/g).join(' ').replace(/^[a-z]/
 Vue.filter('date', v => {
   const date = new Date(v);
 
-  return `${date.getUTCHours() < 10 ? '0' : ''}${date.getUTCHours()}:${date.getUTCMinutes() < 10 ? '0' : ''}${date.getUTCMinutes()} ${date.getUTCDate() < 10 ? '0' : ''}${date.getUTCDate()}/${date.getUTCMonth() < 10 ? '0' : ''}${date.getUTCMonth() + 1}/${date.getUTCFullYear()}`;
+  const t = `${date.getUTCHours() < 10 ? '0' : ''}${date.getUTCHours()}:${date.getUTCMinutes() < 10 ? '0' : ''}${date.getUTCMinutes()} `;
+  const d = `${date.getUTCDate() < 10 ? '0' : ''}${date.getUTCDate()}/${date.getUTCMonth() < 10 ? '0' : ''}${date.getUTCMonth() + 1}/${date.getUTCFullYear()}`;
+
+  return `${t} ${d}`;
 });
 
 
@@ -85,7 +93,7 @@ const Scroller = {
 
   methods: {
     scroll() {
-      this.$el.querySelector && this.$el.querySelector('li:last-child').scrollIntoView({ block: 'start', behavior: 'smooth' });
+      this.$el.querySelector('li:last-child') && this.$el.querySelector('li:last-child').scrollIntoView({ block: 'start', behavior: 'smooth' });
     },
   },
 };
@@ -303,21 +311,71 @@ const Notes = {
   mixins: [Scroller],
 
   template: `
-    <md-list v-if="list.length" class="md-triple-line">
-      <md-list-item v-for="note in list" :key="note['.key']" @click="set(note)">
-        <div class="md-list-text-container">
-          <span class="text">{{ note.text }}</span>
-          <span>{{ note.modified | date }}</span>
-        </div>
-        <md-icon class="md-primary">chevron_right</md-icon>
-      </md-list-item>
-    </md-list>
+    <section>
+      <div v-if="!active">
+        <md-list v-if="list.length" class="md-double-line">
+          <md-list-item v-for="note in list" :key="note['.key']" @click="select(note)">
+            <div class="md-list-text-container">
+              <span class="md-text">{{ note.text }}</span>
+              <span>{{ note.modified | date }}</span>
+            </div>
+            <md-icon>chevron_right</md-icon>
+          </md-list-item>
+        </md-list>
+      </div>
+      <div v-else class="md-item">
+        <textarea ref="text" v-model="active.modified.text" type="text" placeholder="Type here..." rows="1" class="md-text"></textarea>
+        <md-button @click="set()" class="md-fab md-fab-bottom-right md-icon-button md-raised md-dense">
+          <md-icon>done</md-icon>
+        </md-button>
+      </div>
+    </section>
   `,
 
+  data() {
+    return {
+      active: undefined,
+    };
+  },
+  watch: {
+    active() {
+      this.$emit('section', this.active ? 'item' : 'list');
+    },
+  },
+
+  updated() {
+    if (this.active) {
+      this.$refs.text.focus();
+    }
+  },
+
   methods: {
-    set(item) {
-      item.modified = timestamp;
-      this.$firebaseRefs.list.child(item['.key']).set(sanitize(item));
+    select(note = {}) {
+      const original = Object.assign({}, note);
+      const modified = Object.assign({}, note);
+
+      if (!modified['.key']) {
+        modified['.key'] = firebase.database().ref().push().key;
+        modified.creator = firebase.auth().currentUser.uid;
+        modified.created = timestamp;
+      }
+
+      this.active = { original, modified };
+    },
+    set() {
+      if (this.active.original.text !== this.active.modified.text) {
+        this.active.modified.modified = timestamp;
+        this.$firebaseRefs.list.child(this.active.modified['.key']).set(sanitize(this.active.modified));
+      }
+
+      this.active = undefined;
+    },
+    remove() {
+      if (this.active.original['.key']) {
+        this.$firebaseRefs.list.child(this.active.original['.key']).remove();
+      }
+
+      this.active = undefined;
     },
   },
 };
@@ -326,14 +384,30 @@ const Notes = {
 /* ************************************************************ */
 
 
+const routes = {
+  auth: {
+    view: 'auth',
+  },
+  main: {
+    view: 'main',
+    section: 'list',
+  },
+};
+
+
 const vm = new Vue({
   el: '#app',
 
   data: {
-    view: 'auth',
+    route: routes.auth,
     theme: undefined,
     user: {},
     info: undefined,
+  },
+  computed: {
+    noop() {
+      return this.$refs.notes && this.$refs.notes.active;
+    },
   },
   watch: {
     theme() {
@@ -341,9 +415,9 @@ const vm = new Vue({
     },
     user() {
       if (this.user) {
-        this.view = 'main';
+        this.route = routes.main;
       } else {
-        this.view = 'auth';
+        this.route = routes.auth;
       }
     },
   },

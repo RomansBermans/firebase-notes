@@ -23,53 +23,63 @@
   <body>
     <div id="app" v-cloak>
 
-      <section v-show="view === 'auth'" class="auth">
+      <section v-show="route.view === 'auth'" class="auth">
         <auth ref="auth" @user="setUser($event)" @action="setInfo()" @message="setInfo($event)"></auth>
       </section>
 
-      <section v-if="view === 'main'" class="main">
-        <header>
-          <md-toolbar>
-            <md-button @click="$refs.sidebar.open()" class="md-icon-button" >
-              <md-icon>menu</md-icon>
-            </md-button>
+      <section v-if="route.view === 'main'" class="main">
+        <md-theme md-name="minimal">
 
-            <h2 class="md-title" style="flex:1">Notes</h2>
+          <header>
+            <md-whiteframe md-elevation="4">
+              <md-toolbar>
+                <md-button @click="$refs.sidebar.open()" class="md-icon-button" >
+                  <md-icon>menu</md-icon>
+                </md-button>
 
-            <md-button @click="" class="md-icon-button">
-              <md-icon>add</md-icon>
-            </md-button>
-          </md-toolbar>
+                <h2 class="md-title" style="flex:1">Notes</h2>
 
-          <md-sidenav ref="sidebar" @open="setInfo()" class="md-left md-fixed">
-            <md-toolbar class="md-account-header">
-              <md-list class="md-transparent">
-                <md-list-item>
-                  <md-avatar class="md-avatar-icon md-large">
-                    <md-image v-if="user.photoURL" :md-src="user.photoURL"></md-image>
-                    <md-icon v-else>person</md-icon>
-                  </md-avatar>
-                </md-list-item>
-                <md-list-item>
-                  <div class="md-list-text-container">
-                    <span>{{ user.displayName }}</span>
-                    <span>{{ user.email }}</span>
-                  </div>
+                <md-button v-if="route.section === 'item'" @click="$refs.notes.remove()" class="md-icon-button">
+                  <md-icon>remove</md-icon>
+                </md-button>
+                <md-button v-else @click="$refs.notes.select()" class="md-icon-button">
+                  <md-icon>add</md-icon>
+                </md-button>
+              </md-toolbar>
+            </md-whiteframe>
+          </header>
+
+          <aside>
+            <md-sidenav ref="sidebar" @open="setInfo()" class="md-left md-fixed">
+              <md-toolbar>
+                <md-list>
+                  <md-list-item>
+                    <md-avatar class="md-avatar-icon">
+                      <md-image v-if="user.photoURL" :md-src="user.photoURL"></md-image>
+                      <md-icon v-else>face</md-icon>
+                    </md-avatar>
+                    <div class="md-list-text-container">
+                      <span>{{ user.displayName }}</span>
+                      <span>{{ user.email }}</span>
+                    </div>
+                  </md-list-item>
+                </md-list>
+              </md-toolbar>
+              <md-divider></md-divider>
+              <md-list>
+                <md-list-item @click="$refs.auth.signOut()">
+                  <md-icon>exit_to_app</md-icon>
+                  <span>Sign Out</span>
                 </md-list-item>
               </md-list>
-            </md-toolbar>
+            </md-sidenav>
+          </aside>
 
-            <md-list>
-              <md-list-item @click="$refs.auth.signOut()">
-                <span>Sign Out</span>
-              </md-list-item>
-            </md-list>
-          </md-sidenav>
-        </header>
+          <main>
+            <notes ref="notes" :path="`notes/${(user || {}).uid}`" :size="50" order="modified" @section="route.section = $event"></notes>
+          </main>
+        </md-theme>
 
-        <main>
-          <notes :path="`notes/${(user || {}).uid}`" :size="25" order="modified" :visible="view === 'notes'"></notes>
-        </main>
       </section>
 
       <md-snackbar ref="snackbar" @close="theme = undefined" md-position="bottom center" :md-duration="3000">

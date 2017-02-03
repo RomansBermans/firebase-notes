@@ -27,6 +27,7 @@
 
 
 #app .main {
+  height: 100vh;
   padding: 64px 0 0 0;
 }
 
@@ -37,14 +38,30 @@
   width: 100%;
 }
 
-#app .main .md-list .md-list-item-holder .md-icon {
+#app .main main .md-list .md-icon {
   margin: 6px;
 }
-#app .main .md-list .md-list-text-container .text {
+#app .main main .md-list .md-text {
   overflow: hidden;
-  text-overflow: ellipsis;
-
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
+}
+
+#app .main main .md-item .md-text {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 307px;
+  padding: 88px 16px 30px;
+  border: none;
+  outline: none;
+  font: inherit;
+  font-size: 16px;
+  letter-spacing: 0.15px;
+  resize: none;
+}
+
+#app .main main .md-item .md-button {
+  right: 12px;
 }
