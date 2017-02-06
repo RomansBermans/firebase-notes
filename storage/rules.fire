@@ -30,18 +30,6 @@ function metadataAllowed() {
 
 service firebase.storage {
   match /b/prototype-9c221.appspot.com/o {
-    match /public/{image} {
-      allow read: if authUid(resource.metadata.creator)
-                  || (auth() && resource.metadata.visibility == 'authenticated')
-                  || resource.metadata.visibility == 'public';
-      allow write: if auth()
-                   && (
-                        (resource == null && fileAllowed(image, 4) && metadataAllowed() && authUid(request.resource.metadata.creator))
-                     || (resource != null && request.resource == null && authUid(resource.metadata.creator))
-                     || (resource != null && resource.crc32c == request.resource.crc32c && metadataAllowed() && authUid(resource.metadata.creator))
-                   );
-    }
-
     match /notes/{user}/{note}/{image} {
       allow read: if authUid(user)
                   || (auth() && resource.metadata.visibility == 'authenticated')
@@ -51,6 +39,18 @@ service firebase.storage {
                         (resource == null && fileAllowed(image, 4) && metadataAllowed())
                      || (resource != null && request.resource == null)
                      || (resource != null && resource.crc32c == request.resource.crc32c && metadataAllowed())
+                   );
+    }
+
+    match /notes-direct/{note}/{image} {
+      allow read: if authUid(resource.metadata.creator)
+                  || (auth() && resource.metadata.visibility == 'authenticated')
+                  || resource.metadata.visibility == 'public';
+      allow write: if auth()
+                   && (
+                        (resource == null && fileAllowed(image, 4) && metadataAllowed() && authUid(request.resource.metadata.creator))
+                     || (resource != null && request.resource == null && authUid(resource.metadata.creator))
+                     || (resource != null && resource.crc32c == request.resource.crc32c && metadataAllowed() && authUid(resource.metadata.creator))
                    );
     }
   }

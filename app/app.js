@@ -1,4 +1,4 @@
-/* eslint-disable no-undef, no-unused-expressions */
+/* eslint-disable no-undef, no-unused-vars, no-unused-expressions */
 
 
 const config = {
@@ -93,7 +93,7 @@ const Scroller = {
 
   methods: {
     scroll() {
-      this.$el.querySelector('li:last-child') && this.$el.querySelector('li:last-child').scrollIntoView({ block: 'start', behavior: 'smooth' });
+      this.$el.querySelector('li:last-child') && this.$el.querySelector('li:last-child').scrollIntoView({ block: 'start', behavior: 'instant' });
     },
   },
 };
@@ -314,7 +314,7 @@ const Notes = {
     <section>
       <div v-if="!active">
         <md-list v-if="list.length" class="md-double-line">
-          <md-list-item v-for="note in list" :key="note['.key']" @click="select(note)">
+          <md-list-item v-for="note in list" :key="note['.key']" @click="select(note)" disabled>
             <div class="md-list-text-container">
               <span class="md-text">{{ note.text }}</span>
               <span>{{ note.modified | date }}</span>
@@ -324,10 +324,7 @@ const Notes = {
         </md-list>
       </div>
       <div v-else class="md-item">
-        <textarea ref="text" v-model="active.modified.text" type="text" placeholder="Type here..." rows="1" class="md-text"></textarea>
-        <md-button @click="set()" class="md-fab md-icon-button md-raised md-dense">
-          <md-icon>done</md-icon>
-        </md-button>
+        <textarea v-model="active.modified.text" @input="input" type="text" placeholder="Type here..." class="md-text"></textarea>
       </div>
     </section>
   `,
@@ -337,20 +334,24 @@ const Notes = {
       active: undefined,
     };
   },
+  computed: {
+    title() {
+      return this.active ? this.active.modified.text : '';
+    },
+  },
+
   watch: {
     active() {
       this.$emit('section', this.active ? 'item' : 'list');
     },
   },
 
-  updated() {
-    if (this.active) {
-      this.$refs.text.focus();
-    }
-  },
-
   methods: {
-    select(note = {}) {
+    input(e) {
+      e.target.scrollTop = e.target.scrollHeight;
+    },
+
+    select(note = { text: '' }) {
       const original = Object.assign({}, note);
       const modified = Object.assign({}, note);
 
@@ -362,6 +363,7 @@ const Notes = {
 
       this.active = { original, modified };
     },
+
     set() {
       if (this.active.original.text !== this.active.modified.text) {
         this.active.modified.modified = timestamp;
@@ -401,13 +403,9 @@ const vm = new Vue({
   data: {
     route: routes.auth,
     theme: undefined,
+
     user: {},
     info: undefined,
-  },
-  computed: {
-    noop() {
-      return this.$refs.notes && this.$refs.notes.active;
-    },
   },
   watch: {
     theme() {
@@ -426,7 +424,6 @@ const vm = new Vue({
     setUser(user) {
       this.user = user;
     },
-
     setInfo(message = {}) {
       this.$refs.snackbar.active && this.$refs.snackbar.close();
       this.theme = message.type;

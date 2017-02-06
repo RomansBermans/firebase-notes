@@ -150,8 +150,7 @@ describe('test:database', () => {
     test(user).pass.update(`/notes/${user.uid}/n1`, { modified: helper.data.timestamp });
     test(user).fail.update(`/notes/${user.uid}/n1`, { creator: 'u0' });
     test(user).pass.update(`/notes/${user.uid}/n1`, { creator: user.uid });
-    test(user).fail.update(`/notes/${user.uid}/n1`, { title: '' });
-    test(user).pass.update(`/notes/${user.uid}/n1`, { title: 'Title' });
+    test(user).pass.update(`/notes/${user.uid}/n1`, { text: 'Title' });
     test(user).fail.update(`/notes/${user.uid}/n1`, { visibility: 'private' });
     test(user).pass.update(`/notes/${user.uid}/n1`, { visibility: 'authenticated' });
     test(user).pass.update(`/notes/${user.uid}/n1`, { visibility: 'public' });

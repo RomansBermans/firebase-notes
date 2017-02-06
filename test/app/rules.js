@@ -107,10 +107,10 @@ describe(`test:client \u2192 ${config.databaseURL}`, () => {
       return database
       .ref()
       .update({
-        '/public/p1': helper.data.model.public({ user }),
-        '/public/p2': helper.data.model.public({ user, visibility: 'authenticated' }),
-        '/public/p3': helper.data.model.public({ user, visibility: 'public' }),
         [`/notes/${user.uid}/n1`]: helper.data.model.note({ user }),
+        '/notes-direct/n1': helper.data.model.note({ user }),
+        '/notes-direct/n2': helper.data.model.note({ user, visibility: 'authenticated' }),
+        '/notes-direct/n3': helper.data.model.note({ user, visibility: 'public' }),
       });
     })
     .then(() => done());
@@ -227,8 +227,7 @@ describe(`test:client \u2192 ${config.databaseURL}`, () => {
     test.pass.update(() => `/notes/${user.uid}/n1`, () => ({ modified: helper.data.timestamp }));
     test.fail.update(() => `/notes/${user.uid}/n1`, () => ({ creator: 'u0' }));
     test.pass.update(() => `/notes/${user.uid}/n1`, () => ({ creator: user.uid }));
-    test.fail.update(() => `/notes/${user.uid}/n1`, () => ({ title: '' }));
-    test.pass.update(() => `/notes/${user.uid}/n1`, () => ({ title: 'Title' }));
+    test.pass.update(() => `/notes/${user.uid}/n1`, () => ({ text: 'Title' }));
     test.fail.update(() => `/notes/${user.uid}/n1`, () => ({ visibility: 'private' }));
     test.pass.update(() => `/notes/${user.uid}/n1`, () => ({ visibility: 'authenticated' }));
     test.pass.update(() => `/notes/${user.uid}/n1`, () => ({ visibility: 'public' }));

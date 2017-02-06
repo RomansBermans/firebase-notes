@@ -60,7 +60,7 @@ type Note {
   creator: AuthUid,
   created: Created,
   modified: Modified,
-  text: Text,
+  text: String,
   visibility: Visibility | Null,
 }
 
@@ -68,22 +68,6 @@ type Note {
 /************************************************
  * PATHS
  ************************************************/
-
-
-path /public {
-  index() { ['modified'] }
-
-  path /{public} is Note {
-    read() {
-         authUid(this.creator)
-      || (auth() && this.visibility == 'authenticated')
-      || this.visibility == 'public'
-    }
-    create() { auth() }
-    update() { auth() }
-    delete() { auth() && authUid(prior(this).creator) }
-  }
-}
 
 
 path /notes {
@@ -100,5 +84,20 @@ path /notes {
       update() { authUid($user) }
       delete() { authUid($user) }
     }
+  }
+}
+
+path /notes-direct {
+  index() { ['modified'] }
+
+  path /{note} is Note {
+    read() {
+         authUid(this.creator)
+      || (auth() && this.visibility == 'authenticated')
+      || this.visibility == 'public'
+    }
+    create() { auth() }
+    update() { auth() }
+    delete() { auth() && authUid(prior(this).creator) }
   }
 }

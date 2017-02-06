@@ -53,15 +53,16 @@ $.data.model = {
 
 
 $.data.initial = {
-  public: {
-    p1: $.data.model.note({ user: { uid: 'u1' } }),
-    p2: $.data.model.note({ user: { uid: 'u1' }, visibility: 'authenticated' }),
-    p3: $.data.model.note({ user: { uid: 'u1' }, visibility: 'public' }),
-  },
   notes: {
     u1: {
       n1: $.data.model.note({ user: { uid: 'u1' } }),
     },
+  },
+
+  'notes-direct': {
+    n1: $.data.model.note({ user: { uid: 'u1' } }),
+    n2: $.data.model.note({ user: { uid: 'u1' }, visibility: 'authenticated' }),
+    n3: $.data.model.note({ user: { uid: 'u1' }, visibility: 'public' }),
   },
 };
 
