@@ -22,8 +22,6 @@ mocha.timeout(5000);
 /* ************************************************************ */
 
 
-let user = { uid: 'u@' };
-
 const test = {
   fail: {
     read: path =>
@@ -98,139 +96,239 @@ const test = {
 /* ************************************************************ */
 
 
-describe(`test:client \u2192 ${config.databaseURL}`, () => {
-  before(done => {
-    helper.login('u1@test.user.com', '123456789')
-    .then($user => {
-      user = $user;
-
-      return database
-      .ref()
-      .update({
-        [`/notes/${user.uid}/n1`]: helper.data.model.note({ user }),
-        '/notes-direct/n1': helper.data.model.note({ user }),
-        '/notes-direct/n2': helper.data.model.note({ user, visibility: 'authenticated' }),
-        '/notes-direct/n3': helper.data.model.note({ user, visibility: 'public' }),
-      });
-    })
-    .then(() => done());
-  });
-
-  describe('user:unauthenticated', () => {
-    before(done => {
-      helper.logout()
-      .then(() => {
-        user = { uid: null };
-        done();
-      });
-    });
+describe(`test:app \u2192 ${config.databaseURL}`, () => {
+  describe('/notes', () => {
+    let user = { uid: 'u@' };
+    let u1 = 'u1';
 
 
-    test.fail.read(() => '/public/p1');
-    test.fail.read(() => '/public/p2');
-    test.pass.read(() => '/public/p3');
-
-
-    test.fail.read(() => '/notes');
-    test.fail.delete(() => '/notes');
-  });
-
-
-  describe('user:anonymous', () => {
-    before(done => {
-      helper.login(null, null)
-      .then($user => {
-        user = $user;
-        done();
-      });
-    });
-
-    after(() =>
-      user.delete()
-    );
-
-
-    test.fail.read(() => '/public/p1');
-    test.fail.read(() => '/public/p2');
-    test.pass.read(() => '/public/p3');
-
-
-    test.fail.read(() => '/notes');
-    test.fail.delete(() => '/notes');
-
-    test.fail.read(() => `/notes/${user.uid}`);
-    test.fail.delete(() => `/notes/${user.uid}`);
-
-    test.fail.read(() => `/notes/${user.uid}/n1`);
-    test.fail.create(() => `/notes/${user.uid}/n1`, () => helper.data.model.note({ user }));
-    test.fail.delete(() => `/notes/${user.uid}/n1`);
-  });
-
-
-  describe('user:authenticated:0', () => {
-    before(done => {
-      helper.login('u0@test.user.com', '123456789')
-      .then($user => {
-        user = $user;
-        done();
-      });
-    });
-
-    after(() =>
-      user.delete()
-    );
-
-
-    test.fail.read(() => '/public/p1');
-    test.pass.read(() => '/public/p2');
-    test.pass.read(() => '/public/p3');
-
-
-    test.fail.read(() => '/notes');
-    test.fail.delete(() => '/notes');
-
-    test.pass.read(() => `/notes/${user.uid}`);
-    test.fail.delete(() => `/notes/${user.uid}`);
-
-    test.pass.read(() => `/notes/${user.uid}/n1`);
-    test.pass.create(() => `/notes/${user.uid}/n1`, () => helper.data.model.note({ user }));
-    test.pass.delete(() => `/notes/${user.uid}/n1`);
-  });
-
-
-  describe('user:authenticated:1', () => {
     before(done => {
       helper.login('u1@test.user.com', '123456789')
       .then($user => {
         user = $user;
-        done();
-      });
+        u1 = user.uid;
+
+        return database
+        .ref()
+        .update({
+          [`/notes/${user.uid}/n1`]: helper.data.model.note({ user }),
+          [`/notes/${user.uid}/n2`]: helper.data.model.note({ user, visibility: 'authenticated' }),
+          [`/notes/${user.uid}/n3`]: helper.data.model.note({ user, visibility: 'public' }),
+        });
+      })
+      .then(() => done());
     });
 
-    after(() =>
-      user.delete()
-    );
+    describe('user:unauthenticated', () => {
+      before(done => {
+        helper.logout()
+        .then(() => {
+          user = { uid: null };
+          done();
+        });
+      });
 
 
-    test.pass.read(() => '/public/p1');
-    test.pass.read(() => '/public/p2');
-    test.pass.read(() => '/public/p3');
-
-    test.pass.delete(() => '/public/p1');
-    test.pass.delete(() => '/public/p2');
-    test.pass.delete(() => '/public/p3');
+      test.fail.read(() => '/notes');
+      test.fail.delete(() => '/notes');
 
 
-    test.pass.read(() => `/notes/${user.uid}/n1`);
-    test.fail.create(() => `/notes/${user.uid}/n1`, () => helper.data.model.note({ user }));
-    test.fail.update(() => `/notes/${user.uid}/n1`, () => ({ created: helper.data.timestamp }));
-    test.pass.update(() => `/notes/${user.uid}/n1`, () => ({ modified: helper.data.timestamp }));
-    test.fail.update(() => `/notes/${user.uid}/n1`, () => ({ creator: 'u0' }));
-    test.pass.update(() => `/notes/${user.uid}/n1`, () => ({ creator: user.uid }));
-    test.pass.update(() => `/notes/${user.uid}/n1`, () => ({ text: 'Title' }));
-    test.fail.update(() => `/notes/${user.uid}/n1`, () => ({ visibility: 'private' }));
-    test.pass.update(() => `/notes/${user.uid}/n1`, () => ({ visibility: 'authenticated' }));
-    test.pass.update(() => `/notes/${user.uid}/n1`, () => ({ visibility: 'public' }));
-    test.pass.delete(() => `/notes/${user.uid}/n1`);
+      test.fail.read(() => `/notes/${u1}/n1`);
+      test.fail.read(() => `/notes/${u1}/n2`);
+      test.pass.read(() => `/notes/${u1}/n3`);
+    });
+
+    describe('user:anonymous', () => {
+      before(done => {
+        helper.login(null, null)
+        .then($user => {
+          user = $user;
+          done();
+        });
+      });
+
+      after(() =>
+        user.delete()
+      );
+
+
+      test.fail.read(() => '/notes');
+      test.fail.delete(() => '/notes');
+
+      test.fail.read(() => `/notes/${user.uid}`);
+      test.fail.delete(() => `/notes/${user.uid}`);
+
+      test.fail.read(() => `/notes/${user.uid}/n1`);
+      test.fail.create(() => `/notes/${user.uid}/n1`, () => helper.data.model.note({ user }));
+      test.fail.delete(() => `/notes/${user.uid}/n1`);
+
+
+      test.fail.read(() => `/notes/${u1}/n1`);
+      test.fail.read(() => `/notes/${u1}/n2`);
+      test.pass.read(() => `/notes/${u1}/n3`);
+    });
+
+    describe('user:authenticated:0', () => {
+      before(done => {
+        helper.login('u0@test.user.com', '123456789')
+        .then($user => {
+          user = $user;
+          done();
+        });
+      });
+
+      after(() =>
+        user.delete()
+      );
+
+
+      test.fail.read(() => '/notes');
+      test.fail.delete(() => '/notes');
+
+      test.pass.read(() => `/notes/${user.uid}`);
+      test.fail.delete(() => `/notes/${user.uid}`);
+
+      test.pass.read(() => `/notes/${user.uid}/n1`);
+      test.pass.create(() => `/notes/${user.uid}/n1`, () => helper.data.model.note({ user }));
+      test.pass.delete(() => `/notes/${user.uid}/n1`);
+
+
+      test.fail.read(() => `/notes/${u1}/n1`);
+      test.pass.read(() => `/notes/${u1}/n2`);
+      test.pass.read(() => `/notes/${u1}/n3`);
+    });
+
+    describe('user:authenticated:1', () => {
+      before(done => {
+        helper.login('u1@test.user.com', '123456789')
+        .then($user => {
+          user = $user;
+          done();
+        });
+      });
+
+      after(() =>
+        user.delete()
+      );
+
+
+      test.pass.read(() => `/notes/${user.uid}/n1`);
+      test.fail.create(() => `/notes/${user.uid}/n1`, () => helper.data.model.note({ user }));
+      test.fail.update(() => `/notes/${user.uid}/n1`, () => ({ created: helper.data.timestamp }));
+      test.pass.update(() => `/notes/${user.uid}/n1`, () => ({ modified: helper.data.timestamp }));
+      test.fail.update(() => `/notes/${user.uid}/n1`, () => ({ creator: 'u0' }));
+      test.pass.update(() => `/notes/${user.uid}/n1`, () => ({ creator: user.uid }));
+      test.pass.update(() => `/notes/${user.uid}/n1`, () => ({ text: 'Title' }));
+      test.fail.update(() => `/notes/${user.uid}/n1`, () => ({ visibility: 'private' }));
+      test.pass.update(() => `/notes/${user.uid}/n1`, () => ({ visibility: 'authenticated' }));
+      test.pass.update(() => `/notes/${user.uid}/n1`, () => ({ visibility: 'public' }));
+      test.pass.delete(() => `/notes/${user.uid}/n1`);
+
+
+      test.pass.read(() => `/notes/${u1}/n1`);
+      test.pass.read(() => `/notes/${u1}/n2`);
+      test.pass.read(() => `/notes/${u1}/n3`);
+
+      test.pass.delete(() => `/notes/${u1}/n1`);
+      test.pass.delete(() => `/notes/${u1}/n2`);
+      test.pass.delete(() => `/notes/${u1}/n3`);
+    });
+  });
+
+  describe('/notes-direct', () => {
+    let user = { uid: 'u@' };
+
+
+    before(done => {
+      helper.login('u1@test.user.com', '123456789')
+      .then($user => {
+        user = $user;
+
+        return database
+        .ref()
+        .update({
+          '/notes-direct/n1': helper.data.model.note({ user }),
+          '/notes-direct/n2': helper.data.model.note({ user, visibility: 'authenticated' }),
+          '/notes-direct/n3': helper.data.model.note({ user, visibility: 'public' }),
+        });
+      })
+      .then(() => done());
+    });
+
+    describe('user:unauthenticated', () => {
+      before(done => {
+        helper.logout()
+        .then(() => {
+          user = { uid: null };
+          done();
+        });
+      });
+
+
+      test.fail.read(() => '/notes-direct/n1');
+      test.fail.read(() => '/notes-direct/n2');
+      test.pass.read(() => '/notes-direct/n3');
+    });
+
+    describe('user:anonymous', () => {
+      before(done => {
+        helper.login(null, null)
+        .then($user => {
+          user = $user;
+          done();
+        });
+      });
+
+      after(() =>
+        user.delete()
+      );
+
+
+      test.fail.read(() => '/notes-direct/n1');
+      test.fail.read(() => '/notes-direct/n2');
+      test.pass.read(() => '/notes-direct/n3');
+    });
+
+    describe('user:authenticated:0', () => {
+      before(done => {
+        helper.login('u0@test.user.com', '123456789')
+        .then($user => {
+          user = $user;
+          done();
+        });
+      });
+
+      after(() =>
+        user.delete()
+      );
+
+
+      test.fail.read(() => '/notes-direct/n1');
+      test.pass.read(() => '/notes-direct/n2');
+      test.pass.read(() => '/notes-direct/n3');
+    });
+
+    describe('user:authenticated:1', () => {
+      before(done => {
+        helper.login('u1@test.user.com', '123456789')
+        .then($user => {
+          user = $user;
+          done();
+        });
+      });
+
+      after(() =>
+        user.delete()
+      );
+
+
+      test.pass.read(() => '/notes-direct/n1');
+      test.pass.read(() => '/notes-direct/n2');
+      test.pass.read(() => '/notes-direct/n3');
+
+      test.pass.delete(() => '/notes-direct/n1');
+      test.pass.delete(() => '/notes-direct/n2');
+      test.pass.delete(() => '/notes-direct/n3');
+    });
   });
 });

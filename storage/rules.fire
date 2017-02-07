@@ -13,6 +13,8 @@ function authUid(v) { return auth() && v == uid(); }
 function authEmail(v) { return auth() && v == email(); }
 
 
+
+
 function fileAllowed(name, size) {
   return name.matches("^[0-9]{9,}.*")
       && request.resource.contentType.matches('image/.*')
@@ -26,6 +28,8 @@ function metadataAllowed() {
            || request.resource.metadata.visibility in ['authenticated', 'public']
          );
 }
+
+
 
 
 service firebase.storage {

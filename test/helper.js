@@ -52,21 +52,6 @@ $.data.model = {
 };
 
 
-$.data.initial = {
-  notes: {
-    u1: {
-      n1: $.data.model.note({ user: { uid: 'u1' } }),
-    },
-  },
-
-  'notes-direct': {
-    n1: $.data.model.note({ user: { uid: 'u1' } }),
-    n2: $.data.model.note({ user: { uid: 'u1' }, visibility: 'authenticated' }),
-    n3: $.data.model.note({ user: { uid: 'u1' }, visibility: 'public' }),
-  },
-};
-
-
 /* ************************************************************ */
 
 

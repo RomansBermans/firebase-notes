@@ -399,7 +399,6 @@ const routes = {
   },
 };
 
-
 const vm = new Vue({
   el: '#app',
 
