@@ -4,7 +4,7 @@
 const expect = chai.expect;
 
 mocha.ui('bdd');
-mocha.slow(1000);
+mocha.slow(2000);
 mocha.timeout(10000);
 
 
