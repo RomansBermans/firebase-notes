@@ -148,6 +148,10 @@ describe(`test:storage \u2192 ${config.storageBucket}`, () => {
       });
 
 
+      test.fail.read(() => '/notes');
+      test.fail.delete(() => '/notes');
+
+
       test.fail.read(() => `/notes/${u1}/n1/123456789.png`);
       test.fail.read(() => `/notes/${u1}/n2/123456789.png`);
       test.pass.read(() => `/notes/${u1}/n3/123456789.png`);
@@ -166,6 +170,12 @@ describe(`test:storage \u2192 ${config.storageBucket}`, () => {
         user.delete()
       );
 
+
+      test.fail.read(() => '/notes');
+      test.fail.delete(() => '/notes');
+
+      test.fail.read(() => `/notes/${user.uid}`);
+      test.fail.delete(() => `/notes/${user.uid}`);
 
       test.fail.read(() => `/notes/${user.uid}/n1/123456789.png`);
       test.fail.write(() => `/notes/${user.uid}/n1/123456789.png`, 'image/png');
@@ -190,6 +200,12 @@ describe(`test:storage \u2192 ${config.storageBucket}`, () => {
         user.delete()
       );
 
+
+      test.fail.read(() => '/notes');
+      test.fail.delete(() => '/notes');
+
+      test.fail.read(() => `/notes/${user.uid}`);
+      test.fail.delete(() => `/notes/${user.uid}`);
 
       test.pass.read(() => `/notes/${user.uid}/n1/123456789.png`);
       test.pass.write(() => `/notes/${user.uid}/n1/123456789.png`, 'image/png');
@@ -221,11 +237,11 @@ describe(`test:storage \u2192 ${config.storageBucket}`, () => {
       test.pass.meta(() => `/notes/${user.uid}/n1/123456789.png`, () => ({ contentType: 'image/png' }));
       test.pass.meta(() => `/notes/${user.uid}/n1/123456789.png`, () => ({ private: true }));
       test.pass.meta(() => `/notes/${user.uid}/n1/123456789.png`, () => ({ private: null }));
+      test.pass.meta(() => `/notes/${user.uid}/n1/123456789.png`, () => ({ customMetadata: { private: 'true' } }));
       test.fail.meta(() => `/notes/${user.uid}/n1/123456789.png`, () => ({ customMetadata: { visibility: 'private' } }));
       test.pass.meta(() => `/notes/${user.uid}/n1/123456789.png`, () => ({ customMetadata: { visibility: 'authenticated' } }));
       test.pass.meta(() => `/notes/${user.uid}/n1/123456789.png`, () => ({ customMetadata: { visibility: 'public' } }));
       test.pass.meta(() => `/notes/${user.uid}/n1/123456789.png`, () => ({ customMetadata: { visibility: null } }));
-      test.pass.meta(() => `/notes/${user.uid}/n1/123456789.png`, () => ({ customMetadata: { private: 'true' } }));
 
 
       test.pass.read(() => `/notes/${u1}/n1/123456789.png`);
