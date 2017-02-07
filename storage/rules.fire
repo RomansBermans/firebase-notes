@@ -46,6 +46,7 @@ service firebase.storage {
                    );
     }
 
+
     match /notes-direct/{note}/{image} {
       allow read: if authUid(resource.metadata.creator)
                   || (auth() && resource.metadata.visibility == 'authenticated')

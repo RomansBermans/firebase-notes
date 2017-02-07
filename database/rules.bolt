@@ -87,6 +87,7 @@ path /notes {
   }
 }
 
+
 path /notes-direct {
   index() { ['modified'] }
 
