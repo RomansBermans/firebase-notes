@@ -1,22 +1,17 @@
 /* eslint-disable no-param-reassign, no-undef, no-unused-expressions */
 
 
-const config = mocha.env && /test/.test(mocha.env.NODE_ENV) ? FIREBASE_CLIENT_TEST_CONFIG : FIREBASE_CLIENT_DEV_CONFIG;
-
-
-/* ************************************************************ */
-
-
-const database = firebase.database(firebase.initializeApp(config));
-
-firebase.database.enableLogging(false);
-
-
 const expect = chai.expect;
 
 mocha.ui('bdd');
 mocha.slow(500);
 mocha.timeout(5000);
+
+
+const config = mocha.env && /test/.test(mocha.env.NODE_ENV) ? FIREBASE_CLIENT_TEST_CONFIG : FIREBASE_CLIENT_DEV_CONFIG;
+const database = firebase.database(firebase.initializeApp(config));
+
+firebase.database.enableLogging(false);
 
 
 /* ************************************************************ */

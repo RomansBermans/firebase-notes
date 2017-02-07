@@ -1,22 +1,15 @@
 /* eslint-disable no-param-reassign, no-undef */
 
 
-const config = mocha.env && /test/.test(mocha.env.NODE_ENV) ? FIREBASE_CLIENT_TEST_CONFIG : FIREBASE_CLIENT_DEV_CONFIG;
-
-
-/* ************************************************************ */
-
-
-const storage = firebase.storage(firebase.initializeApp(config));
-
-firebase.database.enableLogging(false);
-
-
 const expect = chai.expect;
 
 mocha.ui('bdd');
 mocha.slow(1000);
 mocha.timeout(10000);
+
+
+const config = mocha.env && /test/.test(mocha.env.NODE_ENV) ? FIREBASE_CLIENT_TEST_CONFIG : FIREBASE_CLIENT_DEV_CONFIG;
+const storage = firebase.storage(firebase.initializeApp(config));
 
 
 /* ************************************************************ */
@@ -110,6 +103,7 @@ const test = {
 
 
 /* ************************************************************ */
+
 
 describe(`test:storage \u2192 ${config.storageBucket}`, () => {
   describe('/notes', () => {

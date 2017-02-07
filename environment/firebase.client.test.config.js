@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 
+
 const FIREBASE_CLIENT_TEST_CONFIG = {
   apiKey: 'AIzaSyBXkQvHwMcJIULuK0D0PI9vryAVscrqfFM',
   authDomain: 'prototype-9c221.firebaseapp.com',
