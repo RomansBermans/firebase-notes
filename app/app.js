@@ -324,7 +324,7 @@ const Notes = {
         </md-list>
       </div>
       <div v-else class="md-item">
-        <textarea v-model="active.modified.text" @input="input" type="text" placeholder="Type here..." class="md-text"></textarea>
+        <textarea v-model="active.modified.text" @focus="focus" @input="input" type="text" placeholder="Type here..." class="md-text"></textarea>
       </div>
     </section>
   `,
@@ -347,6 +347,9 @@ const Notes = {
   },
 
   methods: {
+    focus(e) {
+      window.scrollBy(0, 1);
+    },
     input(e) {
       e.target.scrollTop = e.target.scrollHeight;
     },
