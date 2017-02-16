@@ -31,7 +31,7 @@
 }
 
 #app .main header {
-  z-index: 1;
+  z-index: 6;
   position: fixed;
   top: 0;
   width: 100%;
@@ -42,6 +42,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
 
 #app .main main {
   -webkit-overflow-scrolling: touch;
