@@ -3,19 +3,13 @@
 }
 
 
-#app .md-button[disabled] {
-  color: inherit;
-  cursor: pointer;
-}
-
-
-#app .md-image.md-loaded {
+.md-image.md-loaded {
   transition: none;
 }
 
 
-#app .md-snackbar .md-button {
-    margin: -8px -22px;
+.md-snackbar .md-snackbar-container .md-button {
+  margin: -8px -22px -8px 0;
 }
 
 
@@ -23,7 +17,7 @@
   margin: 30px;
   text-align: center;
 }
-#app .auth form > .md-button{
+#app .auth form > .md-button {
   width: 100%;
   margin: 25px 0;
 }
@@ -37,7 +31,7 @@
 }
 
 #app .main header {
-  z-index: 100;
+  z-index: 1;
   position: fixed;
   top: 0;
   width: 100%;
@@ -45,21 +39,14 @@
 
 #app .main header .md-toolbar .md-title {
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 #app .main main {
   -webkit-overflow-scrolling: touch;
 }
 
-#app .main main .md-list .md-text {
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-}
 #app .main main .md-list .md-icon {
   margin: 6px;
 }

@@ -208,8 +208,8 @@ const Item = {
   template: `
     <div v-if="Object.keys(item).length">
       <pre>{{ item }}</pre>
-      <button @click="set(item)">Set</button>
-      <button @click="remove()">Remove</button>
+      <button @click.native="set(item)">Set</button>
+      <button @click.native="remove()">Remove</button>
     </div>
   `,
 
@@ -252,8 +252,8 @@ const List = {
     <ul v-if="list.length">
       <li v-for="item in list" :key="item['.key']">
         <pre>{{ item }}</pre>
-        <button @click="set(item)">Set</button>
-        <button @click="remove(item)">Remove</button>
+        <button @click.native="set(item)">Set</button>
+        <button @click.native="remove(item)">Remove</button>
       </li>
     </ul>
   `,
@@ -314,7 +314,7 @@ const Notes = {
     <section>
       <div v-if="!active">
         <md-list v-if="list.length" class="md-double-line">
-          <md-list-item v-for="note in list" :key="note['.key']" @click="select(note)" disabled>
+          <md-list-item v-for="note in list" :key="note['.key']" @click.native="select(note)">
             <div class="md-list-text-container">
               <span class="md-text">{{ note.text }}</span>
               <span>{{ note.modified | date }}</span>
