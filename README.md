@@ -1,6 +1,6 @@
 # firebase-notes [![Build Status](https://travis-ci.org/RomansBermans/firebase-notes.svg?branch=master)](https://travis-ci.org/RomansBermans/firebase-notes)
 
-Test a Firebase application with [Mocha](https://mochajs.org/), [Chai](http://chaijs.com/) and [Targaryen](https://github.com/goldibex/targaryen).
+Test a Firebase application with [Chai](http://chaijs.com/), [Mocha](https://mochajs.org/) and [Targaryen](https://github.com/goldibex/targaryen).
 
 ## Setup
 
