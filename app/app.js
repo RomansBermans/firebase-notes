@@ -105,10 +105,13 @@ const Scroller = {
 const Auth = {
   template: `
     <form @submit.stop.prevent="submit">
-      <md-input-container v-if="action === 'signUp'">
-        <label>Name</label>
-        <md-input required v-model="name"></md-input>
-      </md-input-container>
+
+      <div v-if="action === 'signUp'">
+        <md-input-container>
+          <label>Name</label>
+          <md-input required v-model="name"></md-input>
+        </md-input-container>
+      </div>
 
       <md-input-container>
         <label>Email</label>
@@ -117,7 +120,7 @@ const Auth = {
 
       <md-input-container v-if="action !== 'resetPassword'" md-has-password>
         <label>Password</label>
-        <md-input required v-model="password" type="password" pattern=".{6,}" title="6 characters minimum"></md-input>
+        <md-input required v-model="password" type="password" minlength="6"></md-input>
       </md-input-container>
 
       <md-button type="submit" class="md-raised md-primary">{{ action | capitalize }}</md-button>
@@ -133,15 +136,18 @@ const Auth = {
           <a @click="action = 'resetPassword'">Reset Password</a>
         </md-layout>
       </md-layout>
+
     </form>
   `,
 
   data() {
     return {
-      name: '',
+      action: 'signIn',
+
       email: '',
       password: '',
-      action: 'signIn',
+
+      name: '',
     };
   },
   watch: {
@@ -182,7 +188,6 @@ const Auth = {
       .then(user =>
         user
         .updateProfile(profile)
-        .then(() => user.reload())
       )
       .then(() => this.$emit('user', firebase.auth().currentUser))
       .catch(err => this.$emit('message', { type: 'error', text: err.message }));
