@@ -61,7 +61,7 @@ Vue.material.registerTheme(themes);
 
 
 Vue.filter('capitalize', v =>
-  v.match(/[A-z][a-z]+/g)
+  v.match(/[A-z].+/g)
   .join(' ')
   .replace(/^[a-z]/g, l =>
     l.toUpperCase()
