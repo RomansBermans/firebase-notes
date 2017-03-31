@@ -60,7 +60,13 @@ Vue.material.registerTheme(themes);
 /* ************************************************************ */
 
 
-Vue.filter('capitalize', v => v.match(/[A-z][a-z]+/g).join(' ').replace(/^[a-z]/g, l => l.toUpperCase()));
+Vue.filter('capitalize', v =>
+  v.match(/[A-z][a-z]+/g)
+  .join(' ')
+  .replace(/^[a-z]/g, l =>
+    l.toUpperCase()
+  )
+);
 
 Vue.filter('date', v => {
   const date = new Date(v);
@@ -75,14 +81,7 @@ Vue.filter('date', v => {
 /* ************************************************************ */
 
 
-const Scroller = {
-  props: ['visible'],
-  watch: {
-    visible() {
-      this.visible && this.scroll();
-    },
-  },
-
+const ListScroller = {
   mounted() {
     this.scroll();
   },
@@ -93,7 +92,9 @@ const Scroller = {
 
   methods: {
     scroll() {
-      this.$el.querySelector('li:last-child') && this.$el.querySelector('li:last-child').scrollIntoView({ block: 'start', behavior: 'instant' });
+      const last = this.$el.querySelector('.md-list .md-list-item:last-child');
+
+      last && last.scrollIntoView({ block: 'start', behavior: 'instant' });
     },
   },
 };
@@ -313,7 +314,7 @@ const List = {
 
 const Notes = {
   extends: List,
-  mixins: [Scroller],
+  mixins: [ListScroller],
 
   template: `
     <section>
