@@ -38,8 +38,9 @@ npm test
 ## Deploy
 
 ### Command Line
+Replace FIREBASE-PROJECT-ID with your Project ID and execute the following command.
 ```
-npm run deploy
+export PROJECT=FIREBASE-PROJECT-ID && npm run deploy
 ```
 
 ### Travis CI
