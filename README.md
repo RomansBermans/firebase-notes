@@ -21,7 +21,7 @@ npm install
 ```
 npm start
 ```
-<img width="210" alt="screen shot 2017-02-08 at 00 02 07" src="https://cloud.githubusercontent.com/assets/358467/22717273/028426fe-ed92-11e6-8bf6-e1e3a96a94f7.png" /><img width="210" alt="screen shot 2017-02-08 at 00 05 18" src="https://cloud.githubusercontent.com/assets/358467/22717329/5b67b2ae-ed92-11e6-9f92-dc786467044f.png" /><img width="210" alt="screen shot 2017-02-07 at 23 59 57" src="https://cloud.githubusercontent.com/assets/358467/22717270/027db076-ed92-11e6-8979-87ed46122f2d.png" /><img width="210" alt="screen shot 2017-02-08 at 00 00 26" src="https://cloud.githubusercontent.com/assets/358467/22717271/02815d70-ed92-11e6-9b53-d506354ef66d.png" />
+<img width="218" alt="screen shot 2017-02-08 at 00 02 07" src="https://cloud.githubusercontent.com/assets/358467/22717273/028426fe-ed92-11e6-8bf6-e1e3a96a94f7.png" /><img width="218" alt="screen shot 2017-02-08 at 00 05 18" src="https://cloud.githubusercontent.com/assets/358467/22717329/5b67b2ae-ed92-11e6-9f92-dc786467044f.png" /><img width="218" alt="screen shot 2017-02-07 at 23 59 57" src="https://cloud.githubusercontent.com/assets/358467/22717270/027db076-ed92-11e6-8979-87ed46122f2d.png" /><img width="218" alt="screen shot 2017-02-08 at 00 00 26" src="https://cloud.githubusercontent.com/assets/358467/22717271/02815d70-ed92-11e6-9b53-d506354ef66d.png" />
 
 ## Test
 ```
