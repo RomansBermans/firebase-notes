@@ -5,7 +5,9 @@ Test a Firebase application with [Chai](http://chaijs.com/), [Mocha](https://moc
 ## Setup
 1. Install [Node.js](https://nodejs.org/en/download/)
 2. Create a project on [Firebase](https://console.firebase.google.com/)
+<br/><img width="448" alt="776c76ec-c777-11e6-975c-6974e3bb9f42" src="https://cloud.githubusercontent.com/assets/358467/22717020/95c70f28-ed90-11e6-9abe-dbc56be509a6.png">
 3. Note down the Project ID
+<br/><img width="526" alt="5a17e886-c779-11e6-9608-3a128400dca9" src="https://cloud.githubusercontent.com/assets/358467/22717019/95bab642-ed90-11e6-80a8-96fc373ac1bd.png">
 4. Enable Authentication > SIGN-IN METHOD > Sign-in providers > Email/Password &amp; Anonymous
 <br/><img width="703" alt="2b149dda-c77a-11e6-8ccf-d5e9401d8e06" src="https://cloud.githubusercontent.com/assets/358467/22717018/95a1e5f4-ed90-11e6-81aa-d2d0a4fcb1da.png" />
 5. If using Travis CI:
