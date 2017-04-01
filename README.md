@@ -4,10 +4,9 @@ Test a Firebase application with [Chai](http://chaijs.com/), [Mocha](https://moc
 
 ## Setup
 1. Install [Node.js](https://nodejs.org/en/download/)
-2. Create a project on [Firebase](https://console.firebase.google.com/)
-3. Note down the Project ID
-4. Enable Authentication > SIGN-IN METHOD > Sign-in providers > Email/Password &amp; Anonymous
-5. If using Travis CI:
+2. Create a project on [Firebase](https://console.firebase.google.com/) and note down the Project ID
+3. Enable Email/Password and Anonymous sign-in providers Authentication > SIGN-IN METHOD 
+4. If using Travis CI:
     1. Create an account on [Travis CI](https://travis-ci.org/) and activate your repository
     2. Execute `firebase login:ci`
     3. Add FIREBASE_TOKEN to Settings > Environment Variables
