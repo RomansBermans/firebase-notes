@@ -40,3 +40,19 @@ Add `[deploy]` to you git commit message.
 
 ## Demo
 https://prototype-9c221.firebaseapp.com/
+
+## Learn More
+
+[Firebase Bolt](https://github.com/firebase/bolt)
+
+[Firebase Realtime Database](https://firebase.google.com/docs/database/)
+
+[Firebase Storage](https://firebase.google.com/docs/storage/)
+
+[Vue.js](https://vuejs.org/)
+
+[VueFire](https://github.com/vuejs/vuefire)
+
+[Vue Material](https://vuematerial.github.io/)
+
+[Targaryen](https://github.com/goldibex/targaryen)
