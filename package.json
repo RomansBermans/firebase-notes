@@ -8,12 +8,12 @@
     "start": "firebase serve",
 
 
-    "pretest:app": "node -e \"require('./init').deploy('database')\" && babel test/helper.js --out-file test/helper.es5.js, test/app/rules.js --out-file test/app/rules.es5.js",
+    "pretest:app": "node -e \"require('./init').deploy('database')\" && babel test/helper.js test/app/rules.js --out-file test/app/rules.babel.js",
     "test:app": "phantomjs --web-security=no node_modules/mocha-phantomjs-core/mocha-phantomjs-core.js test/app/rules.html spec '{\"useColors\": true, \"ignoreResourceErrors\": true}'",
 
     "test:database": "mocha test/database --reporter spec --ui bdd --slow 50 --timeout 1000",
 
-    "pretest:storage": "node -e \"require('./init').deploy('storage')\" && babel test/helper.js --out-file test/helper.es5.js, test/storage/rules.js --out-file test/storage/rules.es5.js",
+    "pretest:storage": "node -e \"require('./init').deploy('storage')\" && babel test/helper.js test/storage/rules.js --out-file test/storage/rules.babel.js",
     "test:storage": "phantomjs --web-security=no node_modules/mocha-phantomjs-core/mocha-phantomjs-core.js test/storage/rules.html spec '{\"useColors\": true, \"ignoreResourceErrors\": true}'",
 
     "pretest": "eslint --ignore-path .gitignore . && node -e \"require('./init').patch.firebase()\"",

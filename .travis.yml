@@ -16,7 +16,7 @@ before_script:
 - export ENVIRONMENT="$(node -p -e "JSON.parse('{\"master\":\"prod\",\"develop\":\"stag\"}').${TRAVIS_BRANCH:-undefined} || ''")"
 
 - if [[ "$ENVIRONMENT" ]]; then
-    export PROJECT="$(node -p -e "require('./environment/settings.$ENVIRONMENT').project.id")";
+    export PROJECT="$(node -p -e "require('./environment/settings').$ENVIRONMENT")";
   fi
 
 - if [[ "$PROJECT" ]]; then

@@ -28,7 +28,7 @@ module.exports = {
 
   deploy: target => {
     const environment = /test/.test(process.env.NODE_ENV) ? 'test' : 'dev';
-    const project = require(`./environment/settings.${environment}`).project.id;
+    const project = require('./environment/settings')[environment];
 
     return shell.exec(`PROJECT=${project} npm run deploy:${target}`, () =>
       console.log('\n\u001B[1m\x1b[32m\u2713  \u001B[1m%s\x1b[0m', `utils.deploy.${target} \u2192 ${project}`)
