@@ -5,8 +5,11 @@ Test a Firebase application with [Chai](http://chaijs.com/), [Mocha](https://moc
 ## Setup
 1. Install [Node.js](https://nodejs.org/en/download/)
 2. Create a project on [Firebase](https://console.firebase.google.com/) and note down the Project ID
-3. Enable Email/Password & Anonymous sign-in providers in Authentication > SIGN-IN METHOD 
-4. If using Travis CI:
+3. Replace the project id in the `environment/settings.json` with your Project ID
+4. Click **Add Firebase to your web app** and copy your Initialization Code
+5. Replace the initialization code in the `environment/config.js` with your Initialization Code
+6. Enable Email/Password & Anonymous sign-in providers in Authentication > SIGN-IN METHOD 
+7. If using Travis CI:
     1. Create an account on [Travis CI](https://travis-ci.org/) and activate your repository
     2. Execute `npm install -g firebase-tools` followed by `firebase login:ci`
     3. Add FIREBASE_TOKEN to Settings > Environment Variables
@@ -54,5 +57,3 @@ https://prototype-9c221.firebaseapp.com/
 [VueFire](https://github.com/vuejs/vuefire)
 
 [Vue Material](https://vuematerial.github.io/)
-
-[Targaryen](https://github.com/goldibex/targaryen)
