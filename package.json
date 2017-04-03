@@ -5,6 +5,7 @@
     "postinstall": "cd app && npm install",
 
 
+    "prestart:app": "node -e \"require('./init').prepare.app('', 'dev')\"",
     "start": "firebase serve",
 
 
@@ -20,6 +21,7 @@
     "test": "npm run test:app && npm run test:database && npm run test:storage",
 
 
+    "predeploy:app": "node -e \"require('./init').prepare.app('$PROJECT')\"",
     "deploy:app": "firebase deploy --only hosting --project $PROJECT --message \"${MESSAGE:- }\"",
 
     "deploy:database": "firebase deploy --only database --project $PROJECT",

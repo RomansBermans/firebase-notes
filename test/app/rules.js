@@ -8,7 +8,8 @@ mocha.slow(500);
 mocha.timeout(10000);
 
 
-const config = mocha.env && /test/.test(mocha.env.NODE_ENV) ? FIREBASE_CLIENT_TEST_CONFIG : FIREBASE_CLIENT_DEV_CONFIG;
+const config = mocha.env && /test/.test(mocha.env.NODE_ENV) ? FIREBASE_CLIENT_CONFIG_TEST : FIREBASE_CLIENT_CONFIG_DEV;
+
 const database = firebase.database(firebase.initializeApp(config));
 
 firebase.database.enableLogging(false);

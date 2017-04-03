@@ -1,13 +1,9 @@
 /* eslint-disable no-undef, no-unused-vars, no-unused-expressions */
 
 
-const config = {
-  apiKey: 'AIzaSyBXkQvHwMcJIULuK0D0PI9vryAVscrqfFM',
-  authDomain: 'prototype-9c221.firebaseapp.com',
-  databaseURL: 'https://prototype-9c221.firebaseio.com',
-  storageBucket: 'prototype-9c221.appspot.com',
-  messagingSenderId: '954671244432',
-};
+/* eslint-disable */
+const config = {"apiKey":"AIzaSyBXkQvHwMcJIULuK0D0PI9vryAVscrqfFM","authDomain":"prototype-9c221.firebaseapp.com","databaseURL":"https://prototype-9c221.firebaseio.com","storageBucket":"prototype-9c221.appspot.com","messagingSenderId":"954671244432"};
+/* eslint-disable */
 
 firebase.initializeApp(config);
 
