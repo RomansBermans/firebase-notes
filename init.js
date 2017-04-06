@@ -9,14 +9,15 @@ const shell = require('shelljs');
 
 module.exports = {
   prepare: {
-    app: (project, environment) => {
+    app: (project, environment = 'dev') => {
       const source = './app/app.js';
-      let $environment = environment;
-      if (!environment) {
-        const settings = require('./environment/settings');
-        $environment = Object.keys(settings).find(k => settings[k] === project);
+      let config;
+      if (project) {
+        const $config = require('./environment/config');
+        config = $config[Object.keys($config).find(k => $config[k].projectId === project)];
+      } else {
+        config = require('./environment/config')[environment];
       }
-      const config = require('./environment/config')[$environment];
 
       fs.readFile(source, 'utf8', (err1, data) => {
         if (err1) { throw err1; }
@@ -49,7 +50,7 @@ module.exports = {
 
   deploy: target => {
     const environment = /test/.test(process.env.NODE_ENV) ? 'test' : 'dev';
-    const project = require('./environment/settings')[environment];
+    const project = require('./environment/config')[environment].projectId;
 
     return shell.exec(`PROJECT=${project} npm run deploy:${target}`, () =>
       console.log('\n\u001B[1m\x1b[32m\u2713  \u001B[1m%s\x1b[0m', `utils.deploy.${target} \u2192 ${project}`)

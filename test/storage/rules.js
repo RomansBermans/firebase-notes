@@ -8,9 +8,9 @@ mocha.slow(1000);
 mocha.timeout(10000);
 
 
-const config = mocha.env && /test/.test(mocha.env.NODE_ENV) ? FIREBASE_CLIENT_CONFIG_TEST : FIREBASE_CLIENT_CONFIG_DEV;
+const $config = mocha.env && /test/.test(mocha.env.NODE_ENV) ? config.test : config.dev;
 
-const storage = firebase.storage(firebase.initializeApp(config));
+const storage = firebase.storage(firebase.initializeApp($config));
 
 
 /* ************************************************************ */
@@ -106,7 +106,7 @@ const test = {
 /* ************************************************************ */
 
 
-describe(`test:storage \u2192 ${config.storageBucket}`, () => {
+describe(`test:storage \u2192 ${$config.storageBucket}`, () => {
   describe('/notes', () => {
     let user = { uid: 'u@' };
     let u1 = 'u1';

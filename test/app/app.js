@@ -8,9 +8,9 @@ mocha.slow(500);
 mocha.timeout(10000);
 
 
-const config = mocha.env && /test/.test(mocha.env.NODE_ENV) ? FIREBASE_CLIENT_CONFIG_TEST : FIREBASE_CLIENT_CONFIG_DEV;
+const $config = mocha.env && /test/.test(mocha.env.NODE_ENV) ? config.test : config.dev;
 
-const database = firebase.database(firebase.initializeApp(config));
+const database = firebase.database(firebase.initializeApp($config));
 
 firebase.database.enableLogging(false);
 
@@ -92,7 +92,7 @@ const test = {
 /* ************************************************************ */
 
 
-describe(`test:app \u2192 ${config.databaseURL}`, () => {
+describe(`test:app \u2192 ${$config.databaseURL}`, () => {
   describe('/notes', () => {
     let user = { uid: 'u@' };
     let u1 = 'u1';

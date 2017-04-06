@@ -1,7 +1,7 @@
 /* eslint-disable no-undef, no-unused-vars */
 
 
-const $ = {
+const helper = {
   logout: () =>
     firebase
     .auth()
@@ -13,42 +13,42 @@ const $ = {
 };
 
 
-$.login = (email, password) =>
-  $.logout()
-  .then(() => {
-    if (email && password) {
-      return firebase
+helper.login = (email, password) => {
+  if (email && password) {
+    return helper.logout()
+    .then(() =>
+      firebase
       .auth()
-      .signInWithEmailAndPassword(email, password);
-    }
+      .signInWithEmailAndPassword(email, password)
+    )
+    .catch(err =>
+      firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+    );
+  }
 
-    return firebase
+  return helper.logout()
+  .then(() =>
+    firebase
     .auth()
-    .signInAnonymously();
-  })
-  .catch(err => {
-    if (email && password) {
-      return firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password);
-    }
-
-    throw err;
-  });
+    .signInAnonymously()
+  );
+};
 
 
 /* ************************************************************ */
 
 
-$.data.model = {
+helper.data.model = {
   note: data =>
-    ({
-      creator: data.user.uid,
-      created: $.data.timestamp,
-      modified: $.data.timestamp,
-      text: 'Text',
-      visibility: data.visibility || null,
-    }),
+  ({
+    creator: data.user.uid,
+    created: helper.data.timestamp,
+    modified: helper.data.timestamp,
+    text: 'Text',
+    visibility: data.visibility || null,
+  }),
 };
 
 
@@ -56,7 +56,5 @@ $.data.model = {
 
 
 if (typeof module === 'object' && module.exports) {
-  module.exports = $;
-} else {
-  const helper = $;
+  module.exports = helper;
 }
