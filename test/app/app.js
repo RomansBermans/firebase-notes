@@ -1,16 +1,19 @@
 /* eslint-disable no-param-reassign, no-undef, no-unused-expressions */
 
 
+const helper = require('../helper');
+
+
+const chai = require('chai');
+const mocha = require('mocha');
+
 const expect = chai.expect;
 
-mocha.ui('bdd');
-mocha.slow(500);
-mocha.timeout(10000);
 
+const firebase = require('firebase');
+const config = require('../../environment/config')[mocha.env && /test/.test(mocha.env.NODE_ENV) ? 'test' : 'dev'];
 
-const $config = mocha.env && /test/.test(mocha.env.NODE_ENV) ? config.test : config.dev;
-
-const database = firebase.database(firebase.initializeApp($config));
+const database = firebase.database(firebase.initializeApp(config));
 
 firebase.database.enableLogging(false);
 
@@ -92,7 +95,7 @@ const test = {
 /* ************************************************************ */
 
 
-describe(`test:app \u2192 ${$config.databaseURL}`, () => {
+describe(`test:app \u2192 ${config.databaseURL}`, () => {
   describe('/notes', () => {
     let user = { uid: 'u@' };
     let u1 = 'u1';

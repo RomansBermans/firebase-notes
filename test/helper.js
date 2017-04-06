@@ -1,4 +1,12 @@
-/* eslint-disable no-undef, no-unused-vars */
+/* eslint-disable no-undef, no-unused-vars, global-require */
+
+
+if (typeof require === 'function') {
+  firebase = require('firebase');
+}
+
+
+/* ************************************************************ */
 
 
 const helper = {

@@ -59,7 +59,7 @@ module.exports = {
 
   patch: {
     firebase: () => {
-      const source = './node_modules/firebase/firebase.js';
+      const source = './node_modules/firebase/database-node.js';
 
       fs.readFile(source, 'utf8', (err1, data) => {
         if (err1) { throw err1; }
