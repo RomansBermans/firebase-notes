@@ -21,7 +21,7 @@ helper.login = (email, password) => {
       .auth()
       .signInWithEmailAndPassword(email, password)
     )
-    .catch(err =>
+    .catch(() =>
       firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
