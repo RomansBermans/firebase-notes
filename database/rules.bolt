@@ -3,9 +3,9 @@ uid() { auth.uid }
 email() { auth.email }
 
 
-anon() { uid() == null }
+anon() { uid() != null && email() == null }
 
-auth() { !anon() && email() != null }
+auth() { uid() != null && email() != null }
 
 
 authUid(v) { auth() && v == uid() }

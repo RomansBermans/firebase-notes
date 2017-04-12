@@ -3,9 +3,9 @@ function uid() { return request.auth.uid; }
 function email() { return request.auth.token.email; }
 
 
-function anon() { return uid() == null; }
+function anon() { return uid() != null && email() == null; }
 
-function auth() { return !anon() && email() != null; }
+function auth() { return uid() != null && email() != null; }
 
 
 function authUid(v) { return auth() && v == uid(); }
