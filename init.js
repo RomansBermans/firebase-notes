@@ -10,7 +10,6 @@ const shell = require('shelljs');
 module.exports = {
   prepare: {
     app: (project, environment = 'dev') => {
-      const source = './app/app.js';
       let config;
       if (project) {
         const $config = require('./environment/config');
@@ -19,15 +18,29 @@ module.exports = {
         config = require('./environment/config')[environment];
       }
 
-      fs.readFile(source, 'utf8', (err1, data) => {
+      const source1 = './app/app.js';
+      fs.readFile(source1, 'utf8', (err1, data) => {
         if (err1) { throw err1; }
 
         const $data = data.replace(/(const config = )[^;]+(;)/g, `$1${JSON.stringify(config)}$2`);
 
-        fs.writeFile(source, $data, err2 => {
+        fs.writeFile(source1, $data, err2 => {
           if (err2) { throw err2; }
 
-          console.log('\n\u001B[1m\x1b[32m\u2713  \u001B[1m%s\x1b[0m', `utils.prepare.app \u2192 ${project || environment}`);
+          console.log('\n\u001B[1m\x1b[32m\u2713  \u001B[1m%s\x1b[0m', `utils.prepare.app \u2192 ${project || environment} \u2192 ${source1}`);
+        });
+      });
+
+      const source2 = './.firebaserc';
+      fs.readFile(source2, 'utf8', (err1, data) => {
+        if (err1) { throw err1; }
+
+        const $data = data.replace(/("default": ")[^"]?(")/g, `$1${config.projectId}$2`);
+
+        fs.writeFile(source2, $data, err2 => {
+          if (err2) { throw err2; }
+
+          console.log('\n\u001B[1m\x1b[32m\u2713  \u001B[1m%s\x1b[0m', `utils.prepare.app \u2192 ${project || environment} \u2192 ${source2}`);
         });
       });
     },
@@ -42,7 +55,7 @@ module.exports = {
         fs.writeFile(source, $data, err2 => {
           if (err2) { throw err2; }
 
-          console.log('\n\u001B[1m\x1b[32m\u2713  \u001B[1m%s\x1b[0m', `utils.prepare.storage \u2192 ${project}`);
+          console.log('\n\u001B[1m\x1b[32m\u2713  \u001B[1m%s\x1b[0m', `utils.prepare.storage \u2192 ${project} \u2192 ${source}`);
         });
       });
     },
@@ -60,7 +73,6 @@ module.exports = {
   patch: {
     firebase: () => {
       const source = './node_modules/firebase/database-node.js';
-
       fs.readFile(source, 'utf8', (err1, data) => {
         if (err1) { throw err1; }
 
@@ -71,7 +83,7 @@ module.exports = {
         fs.writeFile(source, $data, err2 => {
           if (err2) { throw err2; }
 
-          console.log('\n\u001B[1m\x1b[32m\u2713  \u001B[1m%s\x1b[0m', 'utils.patch.firebase');
+          console.log('\n\u001B[1m\x1b[32m\u2713  \u001B[1m%s\x1b[0m', `utils.patch.firebase \u2192 ${source}`);
         });
       });
     },
