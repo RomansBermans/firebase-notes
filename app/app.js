@@ -411,11 +411,6 @@ const vm = new Vue({
     user: {},
     info: undefined,
   },
-  computed: {
-    title() {
-      return this.$refs.notes ? this.$refs.notes.title : 'Notes';
-    },
-  },
   watch: {
     theme() {
       this.$material.setCurrentTheme(themes[this.theme] ? this.theme : 'default');
