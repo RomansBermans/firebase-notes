@@ -46,8 +46,8 @@
   <body>
     <div id="app" v-cloak>
 
-      <section v-show="route.view === 'auth'" class="auth">
-        <auth ref="auth" @user="setUser($event)" @action="setInfo()" @message="setInfo($event)"></auth>
+      <section v-if="route.view === 'auth'" class="auth">
+        <auth ref="auth" @user="setUser($event)" @action="setInfo()" @info="setInfo($event)"></auth>
       </section>
 
       <section v-if="route.view === 'main'" class="main">
@@ -95,7 +95,7 @@
               </md-toolbar>
               <md-divider></md-divider>
               <md-list>
-                <md-list-item @click.native="$refs.auth.signOut()">
+                <md-list-item @click.native="signOut()">
                   <md-icon>exit_to_app</md-icon>
                   <span>Sign Out</span>
                 </md-list-item>
@@ -104,10 +104,10 @@
           </aside>
 
           <main>
-            <notes ref="notes" :path="`notes/${(user || {}).uid}`" :size="100" order="modified" @section="route.section = $event"></notes>
+            <notes ref="notes" :path="`notes/${(user || {}).uid}`" :size="100" order="modified" :user="user" @section="route.section = $event"></notes>
           </main>
-        </md-theme>
 
+        </md-theme>
       </section>
 
       <md-snackbar ref="snackbar" @close="theme = undefined" md-position="bottom center" :md-duration="3000">
@@ -115,6 +115,9 @@
         <md-button @click.native="$refs.snackbar.close()"><md-icon>close</md-icon></md-button>
       </md-snackbar>
 
+      <transition name="fade">
+        <div v-show="!ready" class="splash-screen"></div>
+      </transition>
     </div>
 
     <script src="node_modules/vue/dist/vue.min.js"></script>

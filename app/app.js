@@ -8,10 +8,10 @@ const config = {"apiKey":"AIzaSyBXkQvHwMcJIULuK0D0PI9vryAVscrqfFM","authDomain":
 firebase.initializeApp(config);
 
 
-/* ************************************************************ */
-
-
 const timestamp = firebase.database.ServerValue.TIMESTAMP;
+
+
+/* ************************************************************ */
 
 
 const sanitize = data => {
@@ -158,7 +158,7 @@ const Auth = {
     .auth()
     .onAuthStateChanged(user => {
       this.$emit('user', user);
-      user && this.$emit('message', { type: 'success', text: `Signed in as ${firebase.auth().currentUser.email}` });
+      user && this.$emit('info', { type: 'success', text: `Signed in as ${user.email}` });
     });
   },
 
@@ -171,7 +171,7 @@ const Auth = {
       firebase
       .auth()
       .signInWithEmailAndPassword(this.email, this.password)
-      .catch(err => this.$emit('message', { type: 'error', text: err.message }));
+      .catch(err => this.$emit('info', { type: 'error', text: err.message }));
     },
     signUp() {
       const profile = {
@@ -186,22 +186,21 @@ const Auth = {
         user
         .updateProfile(profile)
       )
-      .then(() => this.$emit('user', firebase.auth().currentUser))
-      .catch(err => this.$emit('message', { type: 'error', text: err.message }));
+      .catch(err => this.$emit('info', { type: 'error', text: err.message }));
     },
     resetPassword() {
       firebase
       .auth()
       .sendPasswordResetEmail(this.email)
-      .then(() => this.$emit('message', { type: 'success', text: `Email sent to ${this.email}` }))
-      .catch(err => this.$emit('message', { type: 'error', text: err.message }));
+      .then(() => this.$emit('info', { type: 'success', text: `Email sent to ${this.email}` }))
+      .catch(err => this.$emit('info', { type: 'error', text: err.message }));
     },
 
     signOut() {
       firebase
       .auth()
       .signOut()
-      .catch(err => this.$emit('message', { type: 'error', text: err.message }));
+      .catch(err => this.$emit('info', { type: 'error', text: err.message }));
     },
   },
 };
@@ -318,7 +317,7 @@ const Notes = {
         <md-list v-if="list.length" class="md-double-line">
           <md-list-item v-for="note in list" :key="note['.key']" @click.native="select(note)">
             <div class="md-list-text-container">
-              <span class="md-text">{{ note.text }}</span>
+              <span>{{ note.text }}</span>
               <span>{{ note.modified | date }}</span>
             </div>
             <md-icon>chevron_right</md-icon>
@@ -331,6 +330,7 @@ const Notes = {
     </section>
   `,
 
+  props: ['user'],
   data() {
     return {
       active: undefined,
@@ -362,7 +362,7 @@ const Notes = {
 
       if (!modified['.key']) {
         modified['.key'] = firebase.database().ref().push().key;
-        modified.creator = firebase.auth().currentUser.uid;
+        modified.creator = this.user.uid;
         modified.created = timestamp;
       }
 
@@ -405,22 +405,28 @@ const vm = new Vue({
   el: '#app',
 
   data: {
+    info: undefined,
+
     route: routes.auth,
     theme: undefined,
 
-    user: {},
-    info: undefined,
+    user: undefined,
+
+    ready: false,
   },
   watch: {
     theme() {
       this.$material.setCurrentTheme(themes[this.theme] ? this.theme : 'default');
     },
+
     user() {
       if (this.user) {
         this.route = routes.main;
       } else {
         this.route = routes.auth;
       }
+
+      this.ready = true;
     },
   },
 
@@ -428,11 +434,17 @@ const vm = new Vue({
     setUser(user) {
       this.user = user;
     },
-    setInfo(message = {}) {
+
+    setInfo(info = {}) {
       this.$refs.snackbar.active && this.$refs.snackbar.close();
-      this.theme = message.type;
-      this.info = message.text;
+      this.theme = info.type;
+      this.info = info.text;
       this.info && this.$refs.snackbar.open();
+    },
+
+    signOut() {
+      this.$options.components.Auth.methods.signOut();
+      this.route = routes.auth;
     },
   },
 

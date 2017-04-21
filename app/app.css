@@ -1,7 +1,22 @@
+
+
+.fade-leave-active {
+  transition: opacity .5s .25s;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+
+
 .md-image.md-loaded {
   transition: none;
 }
 
+
+.md-snackbar .md-snackbar-container {
+  color: rgba(0, 0, 0, .54);
+  background-color: #eee;
+}
 
 .md-snackbar .md-snackbar-container .md-button {
   margin: -8px -22px -8px 0;
@@ -32,7 +47,7 @@
 }
 
 #app .main header {
-  z-index: 6;
+  z-index: 3;
   position: fixed;
   top: 0;
   width: 100%;
@@ -40,12 +55,13 @@
 
 #app .main header .md-toolbar .md-title {
   overflow: hidden;
+  overflow-wrap: normal;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
 
-#app .main main {
+#app .main main .md-list {
   -webkit-overflow-scrolling: touch;
 }
 
@@ -67,4 +83,22 @@
   font-size: 16px;
   letter-spacing: 0.15px;
   resize: none;
+}
+
+
+#app .splash-screen {
+  z-index: 3000;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  height: 100%;
+  width: 100%;
+
+  background-image: url(./images/icons/apple-icon-192x192.png);
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-size: 96px;
+  background-position: 50%;
 }
