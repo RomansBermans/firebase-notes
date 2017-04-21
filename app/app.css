@@ -59,10 +59,6 @@ body {
 }
 
 
-#app .main {
-  padding: 64px 0 0 0;
-}
-
 #app .main header {
   z-index: 3;
 
