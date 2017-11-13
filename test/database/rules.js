@@ -13,7 +13,7 @@ const targaryen = require('targaryen/plugins/chai');
 /* ************************************************************ */
 
 
-const expect = chai.expect;
+const { expect } = chai;
 chai.use(targaryen);
 
 
@@ -24,37 +24,37 @@ const test = user => ({
   fail: {
     read: path =>
       it(`- READ   ${path}`, () =>
-        expect(user).cannot.read.path(path)
+        expect(user).cannot.read.path(path),
       ),
     create: (path, data) =>
       it(`- CREATE ${path}`, () =>
-        expect(user).cannot.write(data).to.path(path)
+        expect(user).cannot.write(data).to.path(path),
       ),
     update: (path, data) =>
       it(`- UPDATE ${path} \u2192 ${Object.keys(data).join(', ')}`, () =>
-        expect(user).cannot.patch(data).to.path(path)
+        expect(user).cannot.patch(data).to.path(path),
       ),
     delete: path =>
       it(`- DELETE ${path}`, () =>
-        expect(user).cannot.write(null).to.path(path)
+        expect(user).cannot.write(null).to.path(path),
       ),
   },
   pass: {
     read: path =>
       it(`+ READ   ${path}`, () =>
-        expect(user).can.read.path(path)
+        expect(user).can.read.path(path),
       ),
     create: (path, data) =>
       it(`+ CREATE ${path}`, () =>
-        expect(user).can.write(data).to.path(path)
+        expect(user).can.write(data).to.path(path),
       ),
     update: (path, data) =>
       it(`+ UPDATE ${path} \u2192 ${Object.keys(data).join(', ')}`, () =>
-        expect(user).can.patch(data).to.path(path)
+        expect(user).can.patch(data).to.path(path),
       ),
     delete: path =>
       it(`+ DELETE ${path}`, () =>
-        expect(user).can.write(null).to.path(path)
+        expect(user).can.write(null).to.path(path),
       ),
   },
 });

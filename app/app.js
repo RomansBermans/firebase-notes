@@ -1,9 +1,11 @@
-/* eslint-disable no-undef, no-unused-vars, no-unused-expressions */
+/* */
 
 
-/* eslint-disable */
-const config = {"apiKey":"AIzaSyBXkQvHwMcJIULuK0D0PI9vryAVscrqfFM","authDomain":"prototype-9c221.firebaseapp.com","databaseURL":"https://prototype-9c221.firebaseio.com","projectId":"prototype-9c221","storageBucket":"prototype-9c221.appspot.com","messagingSenderId":"954671244432"};
-/* eslint-disable */
+/* ********* CONFIGURE FIREBASE ********* */
+
+
+// eslint-disable-next-line
+const config = {"apiKey":"AIzaSyBXkQvHwMcJIULuK0D0PI9vryAVscrqfFM","authDomain":"prototype-9c221.firebaseapp.com","databaseURL":"https://prototype-9c221.firebaseio.com","projectId":"prototype-9c221-zz","storageBucket":"prototype-9c221.appspot.com","messagingSenderId":"954671244432"};
 
 firebase.initializeApp(config);
 
@@ -11,7 +13,7 @@ firebase.initializeApp(config);
 const timestamp = firebase.database.ServerValue.TIMESTAMP;
 
 
-/* ************************************************************ */
+/* ********* DEFINE GLOBAL HELPERS ********* */
 
 
 const sanitize = data => {
@@ -27,7 +29,7 @@ const sanitize = data => {
 };
 
 
-/* ************************************************************ */
+/* ********* CONFIGURE VUE ********* */
 
 
 Vue.use(VueMaterial);
@@ -53,15 +55,15 @@ const themes = {
 Vue.material.registerTheme(themes);
 
 
-/* ************************************************************ */
+/* ********* DEFINE VUE FILTERS ********* */
 
 
 Vue.filter('capitalize', v =>
   v.match(/[A-z][a-z]+/g)
-  .join(' ')
-  .replace(/^[a-z]/g, l =>
-    l.toUpperCase()
-  )
+    .join(' ')
+    .replace(/^[a-z]/g, l =>
+      l.toUpperCase(),
+    ),
 );
 
 Vue.filter('date', v => {
@@ -74,7 +76,7 @@ Vue.filter('date', v => {
 });
 
 
-/* ************************************************************ */
+/* ********* DEFINE VUE MIXINS ********* */
 
 
 const ListScroller = {
@@ -96,7 +98,7 @@ const ListScroller = {
 };
 
 
-/* ************************************************************ */
+/* ********* DEFINE VUE COMPONENTS ********* */
 
 
 const Auth = {
@@ -155,11 +157,11 @@ const Auth = {
 
   created() {
     firebase
-    .auth()
-    .onAuthStateChanged(user => {
-      this.$emit('user', user);
-      user && this.$emit('info', { type: 'success', text: `Signed in as ${user.email}` });
-    });
+      .auth()
+      .onAuthStateChanged(user => {
+        this.$emit('user', user);
+        user && this.$emit('info', { type: 'success', text: `Signed in as ${user.email}` });
+      });
   },
 
   methods: {
@@ -169,9 +171,9 @@ const Auth = {
 
     signIn() {
       firebase
-      .auth()
-      .signInWithEmailAndPassword(this.email, this.password)
-      .catch(err => this.$emit('info', { type: 'error', text: err.message }));
+        .auth()
+        .signInWithEmailAndPassword(this.email, this.password)
+        .catch(err => this.$emit('info', { type: 'error', text: err.message }));
     },
     signUp() {
       const profile = {
@@ -180,31 +182,29 @@ const Auth = {
       };
 
       firebase
-      .auth()
-      .createUserWithEmailAndPassword(this.email, this.password)
-      .then(user =>
-        user
-        .updateProfile(profile)
-      )
-      .catch(err => this.$emit('info', { type: 'error', text: err.message }));
+        .auth()
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then(user => user.updateProfile(profile))
+        .catch(err => this.$emit('info', { type: 'error', text: err.message }));
     },
     resetPassword() {
       firebase
-      .auth()
-      .sendPasswordResetEmail(this.email)
-      .then(() => this.$emit('info', { type: 'success', text: `Email sent to ${this.email}` }))
-      .catch(err => this.$emit('info', { type: 'error', text: err.message }));
+        .auth()
+        .sendPasswordResetEmail(this.email)
+        .then(() => this.$emit('info', { type: 'success', text: `Email sent to ${this.email}` }))
+        .catch(err => this.$emit('info', { type: 'error', text: err.message }));
     },
 
     signOut() {
       firebase
-      .auth()
-      .signOut()
-      .catch(err => this.$emit('info', { type: 'error', text: err.message }));
+        .auth()
+        .signOut()
+        .catch(err => this.$emit('info', { type: 'error', text: err.message }));
     },
   },
 };
 
+// eslint-disable-next-line no-unused-vars
 const Item = {
   template: `
     <div v-if="Object.keys(item).length">
@@ -304,9 +304,6 @@ const List = {
 };
 
 
-/* ************************************************************ */
-
-
 const Notes = {
   extends: List,
   mixins: [ListScroller],
@@ -349,7 +346,7 @@ const Notes = {
   },
 
   methods: {
-    focus(e) {
+    focus() {
       window.scrollBy(0, 1);
     },
     input(e) {
@@ -388,7 +385,7 @@ const Notes = {
 };
 
 
-/* ************************************************************ */
+/* ********* INITIALIZE VUE ********* */
 
 
 const routes = {
@@ -401,6 +398,7 @@ const routes = {
   },
 };
 
+// eslint-disable-next-line no-unused-vars
 const vm = new Vue({
   el: '#app',
 

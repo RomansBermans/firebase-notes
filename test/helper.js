@@ -1,4 +1,4 @@
-/* eslint-disable no-undef, no-unused-vars, global-require */
+/* */
 
 
 if (typeof require === 'function') {
@@ -12,8 +12,8 @@ if (typeof require === 'function') {
 const helper = {
   logout: () =>
     firebase
-    .auth()
-    .signOut(),
+      .auth()
+      .signOut(),
   login: undefined,
   data: {
     timestamp: { '.sv': 'timestamp' },
@@ -24,24 +24,24 @@ const helper = {
 helper.login = (email, password) => {
   if (email && password) {
     return helper.logout()
-    .then(() =>
-      firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-    )
-    .catch(() =>
-      firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-    );
+      .then(() =>
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(email, password),
+      )
+      .catch(() =>
+        firebase
+          .auth()
+          .createUserWithEmailAndPassword(email, password),
+      );
   }
 
   return helper.logout()
-  .then(() =>
-    firebase
-    .auth()
-    .signInAnonymously()
-  );
+    .then(() =>
+      firebase
+        .auth()
+        .signInAnonymously(),
+    );
 };
 
 
@@ -50,13 +50,13 @@ helper.login = (email, password) => {
 
 helper.data.model = {
   note: data =>
-  ({
-    creator: data.user.uid,
-    created: helper.data.timestamp,
-    modified: helper.data.timestamp,
-    text: 'Text',
-    visibility: data.visibility || null,
-  }),
+    ({
+      creator: data.user.uid,
+      created: helper.data.timestamp,
+      modified: helper.data.timestamp,
+      text: 'Text',
+      visibility: data.visibility || null,
+    }),
 };
 
 

@@ -1,7 +1,7 @@
-/* eslint-disable no-param-reassign, no-undef */
+/* */
 
 
-const expect = chai.expect;
+const { expect } = chai;
 
 mocha.ui('bdd');
 mocha.slow(1000);
@@ -21,83 +21,83 @@ const test = {
     read: path =>
       it(`- READ   ${path()}`, done => {
         storage
-        .ref(path())
-        .getDownloadURL()
-        .catch(err => {
-          expect(err.code).to.equal('storage/unauthorized');
-          done();
-        });
+          .ref(path())
+          .getDownloadURL()
+          .catch(err => {
+            expect(err.code).to.equal('storage/unauthorized');
+            done();
+          });
       }),
     write: (path, type, meta = () => ({})) =>
       it(`- WRITE  ${path()} ${type}`, done => {
         storage
-        .ref(path())
-        .put(new Blob([Date.now()], { type }), meta())
-        .on(firebase.storage.TaskEvent.STATE_CHANGED, null, err => {
-          expect(err.code).to.equal('storage/unauthorized');
-          done();
-        }, null);
+          .ref(path())
+          .put(new Blob([Date.now()], { type }), meta())
+          .on(firebase.storage.TaskEvent.STATE_CHANGED, null, err => {
+            expect(err.code).to.equal('storage/unauthorized');
+            done();
+          }, null);
       }),
     delete: path =>
       it(`- DELETE ${path()}`, done => {
         storage
-        .ref(path())
-        .delete()
-        .catch(err => {
-          expect(err.code).to.equal('storage/unauthorized');
-          done();
-        });
+          .ref(path())
+          .delete()
+          .catch(err => {
+            expect(err.code).to.equal('storage/unauthorized');
+            done();
+          });
       }),
     meta: (path, meta) =>
       it(`- META   ${path()}`, done => {
         storage
-        .ref(path())
-        .updateMetadata(meta())
-        .catch(err => {
-          expect(err.code).to.equal('storage/unauthorized');
-          done();
-        });
+          .ref(path())
+          .updateMetadata(meta())
+          .catch(err => {
+            expect(err.code).to.equal('storage/unauthorized');
+            done();
+          });
       }),
   },
   pass: {
     read: path =>
       it(`+ READ   ${path()}`, done => {
         storage
-        .ref(path())
-        .getDownloadURL()
-        .then(url => {
-          expect(url).to.be.a('string');
-          done();
-        })
-        .catch(err => {
-          expect(err.code).to.equal('storage/object-not-found');
-          done();
-        });
+          .ref(path())
+          .getDownloadURL()
+          .then(url => {
+            expect(url).to.be.a('string');
+            done();
+          })
+          .catch(err => {
+            expect(err.code).to.equal('storage/object-not-found');
+            done();
+          });
       }),
     write: (path, type, meta = () => ({})) =>
       it(`+ WRITE  ${path()} ${type}`, done => {
         storage
-        .ref(path())
-        .put(new Blob([Date.now()], { type }), meta())
-        .on(firebase.storage.TaskEvent.STATE_CHANGED, null, done, done);
+          .ref(path())
+          .put(new Blob([Date.now()], { type }), meta())
+          .on(firebase.storage.TaskEvent.STATE_CHANGED, null, done, done);
       }),
     delete: path =>
       it(`+ DELETE ${path()}`, done => {
         storage
-        .ref(path())
-        .delete()
-        .then(done)
-        .catch(err => {
-          expect(err.code).to.equal('storage/object-not-found');
-          done();
-        });
+          .ref(path())
+          .delete()
+          .then(done)
+          .catch(err => {
+            expect(err.code).to.equal('storage/object-not-found');
+            done();
+          });
       }),
     meta: (path, meta) =>
       it(`+ META   ${path()}`, done => {
         storage
-        .ref(path())
-        .updateMetadata(meta())
-        .then(() => done());
+          .ref(path())
+          .updateMetadata(meta())
+          .then(() => done());
       }),
   },
 };
@@ -108,38 +108,38 @@ const test = {
 
 describe(`test:storage \u2192 ${$config.storageBucket}`, () => {
   describe('/notes', () => {
-    let user = { uid: 'u@' };
+    let user = { uid: 'u1' };
     let u1 = 'u1';
 
 
     before(done => {
       helper.login('u1@test.user.com', '123456789')
-      .then($user => {
-        user = $user;
-        u1 = user.uid;
+        .then($user => {
+          user = $user;
+          u1 = user.uid;
 
-        return Promise.all([
-          storage
-          .ref(`/notes/${user.uid}/n1/123456789.png`)
-          .put(new Blob([Date.now()], { type: 'image/png' }), { customMetadata: { creator: user.uid } }),
-          storage
-          .ref(`/notes/${user.uid}/n2/123456789.png`)
-          .put(new Blob([Date.now()], { type: 'image/png' }), { customMetadata: { creator: user.uid, visibility: 'authenticated' } }),
-          storage
-          .ref(`/notes/${user.uid}/n3/123456789.png`)
-          .put(new Blob([Date.now()], { type: 'image/png' }), { customMetadata: { creator: user.uid, visibility: 'public' } }),
-        ]);
-      })
-      .then(() => done());
+          return Promise.all([
+            storage
+              .ref(`/notes/${user.uid}/n1/123456789.png`)
+              .put(new Blob([Date.now()], { type: 'image/png' }), { customMetadata: { creator: user.uid } }),
+            storage
+              .ref(`/notes/${user.uid}/n2/123456789.png`)
+              .put(new Blob([Date.now()], { type: 'image/png' }), { customMetadata: { creator: user.uid, visibility: 'authenticated' } }),
+            storage
+              .ref(`/notes/${user.uid}/n3/123456789.png`)
+              .put(new Blob([Date.now()], { type: 'image/png' }), { customMetadata: { creator: user.uid, visibility: 'public' } }),
+          ]);
+        })
+        .then(() => done());
     });
 
     describe('user:unauthenticated', () => {
       before(done => {
         helper.logout()
-        .then(() => {
-          user = { uid: null };
-          done();
-        });
+          .then(() => {
+            user = { uid: null };
+            done();
+          });
       });
 
 
@@ -155,14 +155,14 @@ describe(`test:storage \u2192 ${$config.storageBucket}`, () => {
     describe('user:anonymous', () => {
       before(done => {
         helper.login(null, null)
-        .then($user => {
-          user = $user;
-          done();
-        });
+          .then($user => {
+            user = $user;
+            done();
+          });
       });
 
       after(() =>
-        user.delete()
+        user.delete(),
       );
 
 
@@ -185,14 +185,14 @@ describe(`test:storage \u2192 ${$config.storageBucket}`, () => {
     describe('user:authenticated:0', () => {
       before(done => {
         helper.login('u0@test.user.com', '123456789')
-        .then($user => {
-          user = $user;
-          done();
-        });
+          .then($user => {
+            user = $user;
+            done();
+          });
       });
 
       after(() =>
-        user.delete()
+        user.delete(),
       );
 
 
@@ -215,14 +215,14 @@ describe(`test:storage \u2192 ${$config.storageBucket}`, () => {
     describe('user:authenticated:1', () => {
       before(done => {
         helper.login('u1@test.user.com', '123456789')
-        .then($user => {
-          user = $user;
-          done();
-        });
+          .then($user => {
+            user = $user;
+            done();
+          });
       });
 
       after(() =>
-        user.delete()
+        user.delete(),
       );
 
 
@@ -250,36 +250,36 @@ describe(`test:storage \u2192 ${$config.storageBucket}`, () => {
   });
 
   describe('/notes-direct', () => {
-    let user = { uid: 'u@' };
+    let user = { uid: 'u1' };
 
 
     before(done => {
       helper.login('u1@test.user.com', '123456789')
-      .then($user => {
-        user = $user;
+        .then($user => {
+          user = $user;
 
-        return Promise.all([
-          storage
-          .ref('/notes-direct/n1/123456789.png')
-          .put(new Blob([Date.now()], { type: 'image/png' }), { customMetadata: { creator: user.uid } }),
-          storage
-          .ref('/notes-direct/n2/123456789.png')
-          .put(new Blob([Date.now()], { type: 'image/png' }), { customMetadata: { creator: user.uid, visibility: 'authenticated' } }),
-          storage
-          .ref('/notes-direct/n3/123456789.png')
-          .put(new Blob([Date.now()], { type: 'image/png' }), { customMetadata: { creator: user.uid, visibility: 'public' } }),
-        ]);
-      })
-      .then(() => done());
+          return Promise.all([
+            storage
+              .ref('/notes-direct/n1/123456789.png')
+              .put(new Blob([Date.now()], { type: 'image/png' }), { customMetadata: { creator: user.uid } }),
+            storage
+              .ref('/notes-direct/n2/123456789.png')
+              .put(new Blob([Date.now()], { type: 'image/png' }), { customMetadata: { creator: user.uid, visibility: 'authenticated' } }),
+            storage
+              .ref('/notes-direct/n3/123456789.png')
+              .put(new Blob([Date.now()], { type: 'image/png' }), { customMetadata: { creator: user.uid, visibility: 'public' } }),
+          ]);
+        })
+        .then(() => done());
     });
 
     describe('user:unauthenticated', () => {
       before(done => {
         helper.logout()
-        .then(() => {
-          user = { uid: null };
-          done();
-        });
+          .then(() => {
+            user = { uid: null };
+            done();
+          });
       });
 
 
@@ -291,14 +291,14 @@ describe(`test:storage \u2192 ${$config.storageBucket}`, () => {
     describe('user:anonymous', () => {
       before(done => {
         helper.login(null, null)
-        .then($user => {
-          user = $user;
-          done();
-        });
+          .then($user => {
+            user = $user;
+            done();
+          });
       });
 
       after(() =>
-        user.delete()
+        user.delete(),
       );
 
 
@@ -310,14 +310,14 @@ describe(`test:storage \u2192 ${$config.storageBucket}`, () => {
     describe('user:authenticated:0', () => {
       before(done => {
         helper.login('u0@test.user.com', '123456789')
-        .then($user => {
-          user = $user;
-          done();
-        });
+          .then($user => {
+            user = $user;
+            done();
+          });
       });
 
       after(() =>
-        user.delete()
+        user.delete(),
       );
 
 
@@ -329,14 +329,14 @@ describe(`test:storage \u2192 ${$config.storageBucket}`, () => {
     describe('user:authenticated:1', () => {
       before(done => {
         helper.login('u1@test.user.com', '123456789')
-        .then($user => {
-          user = $user;
-          done();
-        });
+          .then($user => {
+            user = $user;
+            done();
+          });
       });
 
       after(() =>
-        user.delete()
+        user.delete(),
       );
 
 
