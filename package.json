@@ -14,7 +14,7 @@
 
     "test:database": "mocha test/database --reporter spec --ui bdd --slow 50 --timeout 1000",
 
-    "pretest:storage": "node -e \"require('./init').deploy('storage')\" && babel test/helper.js test/storage/rules.js --out-file test/storage/rules.babel.js",
+    "pretest:storage": "node -e \"require('./init').deploy('storage')\" && babel test/helper.js test/storage/rules.es2017.js --out-file test/storage/rules.js",
     "test:storage": "phantomjs --web-security=no node_modules/mocha-phantomjs-core/mocha-phantomjs-core.js test/storage/index.html spec '{\"useColors\": true, \"ignoreResourceErrors\": true}'",
 
     "pretest": "eslint --ext .js .",
@@ -35,6 +35,7 @@
     "babel-cli": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
     "chai": "^3.5.0",
     "eslint": "^4.11.0",
     "eslint-config-airbnb-base": "^12.1.0",

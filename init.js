@@ -1,7 +1,7 @@
-/* */
+/* eslint-disable global-require, no-console */
 
 const fs = require('fs');
-const shell = require('shelljs');
+const shell = require('shelljs'); // eslint-disable-line
 
 
 /* ************************************************************ */
@@ -44,6 +44,7 @@ module.exports = {
         });
       });
     },
+
     storage: project => {
       const source = './storage/rules.fire';
 

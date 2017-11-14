@@ -17,7 +17,6 @@ const database = firebase.database(firebase.initializeApp(config));
 
 firebase.database.enableLogging(false);
 
-
 process.stderr.write = (write =>
   (...args) => {
     if (!args[0].startsWith('FIREBASE WARNING')) {
@@ -32,69 +31,60 @@ process.stderr.write = (write =>
 const test = {
   fail: {
     read: path =>
-      it(`- READ   ${path()}`, done => {
-        database
-          .ref(path())
-          .once('value')
-          .catch(() => done());
+      it(`- READ   ${path()}`, async () => {
+        try {
+          await database.ref(path()).once('value');
+          expect().fail();
+        } catch (err) {
+          expect(err).to.exist;
+        }
       }),
     create: (path, data) =>
-      it(`- CREATE ${path()}`, done => {
-        database
-          .ref(path())
-          .set(data())
-          .catch(() => done());
+      it(`- CREATE ${path()}`, async () => {
+        try {
+          await database.ref(path()).set(data());
+          expect().fail();
+        } catch (err) {
+          expect(err).to.exist;
+        }
       }),
     update: (path, data) =>
-      it(`- UPDATE ${path()} \u2192 ${Object.keys(data()).join(', ')}`, done => {
-        database
-          .ref(path())
-          .update(data())
-          .catch(() => done());
+      it(`- UPDATE ${path()} \u2192 ${Object.keys(data()).join(', ')}`, async () => {
+        try {
+          await database.ref(path()).update(data());
+          expect().fail();
+        } catch (err) {
+          expect(err).to.exist;
+        }
       }),
     delete: path =>
-      it(`- DELETE ${path()}`, done => {
-        database
-          .ref(path())
-          .remove()
-          .catch(() => done());
+      it(`- DELETE ${path()}`, async () => {
+        try {
+          await database.ref(path()).remove();
+          expect().fail();
+        } catch (err) {
+          expect(err).to.exist;
+        }
       }),
   },
   pass: {
     read: (path, cb) =>
-      it(`+ READ   ${path()}`, done => {
-        database
-          .ref(path())
-          .once('value')
-          .then($value => {
-            expect($value).not.to.be.null;
-            cb && cb($value);
-            done();
-          });
+      it(`+ READ   ${path()}`, async () => {
+        const value = await database.ref(path()).once('value');
+        expect(value).not.to.be.null;
+        cb && cb(value);
       }),
     create: (path, data) =>
-      it(`+ CREATE ${path()}`, done => {
-        database
-          .ref(path())
-          .set(data())
-          .then(done)
-          .catch(done);
+      it(`+ CREATE ${path()}`, async () => {
+        await database.ref(path()).set(data());
       }),
     update: (path, data) =>
-      it(`+ UPDATE ${path()} \u2192 ${Object.keys(data()).join(', ')}`, done => {
-        database
-          .ref(path())
-          .update(data())
-          .then(done)
-          .catch(done);
+      it(`+ UPDATE ${path()} \u2192 ${Object.keys(data()).join(', ')}`, async () => {
+        await database.ref(path()).update(data());
       }),
     delete: path =>
-      it(`+ DELETE ${path()}`, done => {
-        database
-          .ref(path())
-          .remove()
-          .then(done)
-          .catch(done);
+      it(`+ DELETE ${path()}`, async () => {
+        await database.ref(path()).remove();
       }),
   },
 };
@@ -109,30 +99,23 @@ describe(`test:app \u2192 ${config.databaseURL}`, () => {
     let u1 = 'u1';
 
 
-    before(done => {
-      helper.login('u1@test.user.com', '123456789')
-        .then($user => {
-          user = $user;
-          u1 = user.uid;
+    before(async () => {
+      user = await helper.login('u1@test.user.com', '123456789');
+      u1 = user.uid;
 
-          return database
-            .ref()
-            .update({
-              [`/notes/${user.uid}/n1`]: helper.data.model.note({ user }),
-              [`/notes/${user.uid}/n2`]: helper.data.model.note({ user, visibility: 'authenticated' }),
-              [`/notes/${user.uid}/n3`]: helper.data.model.note({ user, visibility: 'public' }),
-            });
-        })
-        .then(() => done());
+      await database
+        .ref()
+        .update({
+          [`/notes/${user.uid}/n1`]: helper.data.model.note({ user }),
+          [`/notes/${user.uid}/n2`]: helper.data.model.note({ user, visibility: 'authenticated' }),
+          [`/notes/${user.uid}/n3`]: helper.data.model.note({ user, visibility: 'public' }),
+        });
     });
 
     describe('user:unauthenticated', () => {
-      before(done => {
-        helper.logout()
-          .then(() => {
-            user = { uid: null };
-            done();
-          });
+      before(async () => {
+        await helper.logout();
+        user = { uid: null };
       });
 
 
@@ -146,12 +129,8 @@ describe(`test:app \u2192 ${config.databaseURL}`, () => {
     });
 
     describe('user:anonymous', () => {
-      before(done => {
-        helper.login(null, null)
-          .then($user => {
-            user = $user;
-            done();
-          });
+      before(async () => {
+        user = await helper.login(null, null);
       });
 
       after(() =>
@@ -176,12 +155,8 @@ describe(`test:app \u2192 ${config.databaseURL}`, () => {
     });
 
     describe('user:authenticated:0', () => {
-      before(done => {
-        helper.login('u0@test.user.com', '123456789')
-          .then($user => {
-            user = $user;
-            done();
-          });
+      before(async () => {
+        user = await helper.login('u0@test.user.com', '123456789');
       });
 
       after(() =>
@@ -206,12 +181,8 @@ describe(`test:app \u2192 ${config.databaseURL}`, () => {
     });
 
     describe('user:authenticated:1', () => {
-      before(done => {
-        helper.login('u1@test.user.com', '123456789')
-          .then($user => {
-            user = $user;
-            done();
-          });
+      before(async () => {
+        user = await helper.login('u1@test.user.com', '123456789');
       });
 
       after(() =>
@@ -246,29 +217,22 @@ describe(`test:app \u2192 ${config.databaseURL}`, () => {
     let user = { uid: 'u1' };
 
 
-    before(done => {
-      helper.login('u1@test.user.com', '123456789')
-        .then($user => {
-          user = $user;
+    before(async () => {
+      user = await helper.login('u1@test.user.com', '123456789');
 
-          return database
-            .ref()
-            .update({
-              '/notes-direct/n1': helper.data.model.note({ user }),
-              '/notes-direct/n2': helper.data.model.note({ user, visibility: 'authenticated' }),
-              '/notes-direct/n3': helper.data.model.note({ user, visibility: 'public' }),
-            });
-        })
-        .then(() => done());
+      await database
+        .ref()
+        .update({
+          '/notes-direct/n1': helper.data.model.note({ user }),
+          '/notes-direct/n2': helper.data.model.note({ user, visibility: 'authenticated' }),
+          '/notes-direct/n3': helper.data.model.note({ user, visibility: 'public' }),
+        });
     });
 
     describe('user:unauthenticated', () => {
-      before(done => {
-        helper.logout()
-          .then(() => {
-            user = { uid: null };
-            done();
-          });
+      before(async () => {
+        await helper.logout();
+        user = { uid: null };
       });
 
 
@@ -278,12 +242,8 @@ describe(`test:app \u2192 ${config.databaseURL}`, () => {
     });
 
     describe('user:anonymous', () => {
-      before(done => {
-        helper.login(null, null)
-          .then($user => {
-            user = $user;
-            done();
-          });
+      before(async () => {
+        user = await helper.login(null, null);
       });
 
       after(() =>
@@ -297,12 +257,8 @@ describe(`test:app \u2192 ${config.databaseURL}`, () => {
     });
 
     describe('user:authenticated:0', () => {
-      before(done => {
-        helper.login('u0@test.user.com', '123456789')
-          .then($user => {
-            user = $user;
-            done();
-          });
+      before(async () => {
+        user = await helper.login('u0@test.user.com', '123456789');
       });
 
       after(() =>
@@ -316,12 +272,8 @@ describe(`test:app \u2192 ${config.databaseURL}`, () => {
     });
 
     describe('user:authenticated:1', () => {
-      before(done => {
-        helper.login('u1@test.user.com', '123456789')
-          .then($user => {
-            user = $user;
-            done();
-          });
+      before(async () => {
+        user = await helper.login('u1@test.user.com', '123456789');
       });
 
       after(() =>

@@ -1,14 +1,13 @@
-/* */
+/* eslint-disable no-undef */
 
 
 /* ********* CONFIGURE FIREBASE ********* */
 
 
 // eslint-disable-next-line
-const config = {"apiKey":"AIzaSyBXkQvHwMcJIULuK0D0PI9vryAVscrqfFM","authDomain":"prototype-9c221.firebaseapp.com","databaseURL":"https://prototype-9c221.firebaseio.com","projectId":"prototype-9c221-zz","storageBucket":"prototype-9c221.appspot.com","messagingSenderId":"954671244432"};
+const config = {"apiKey":"AIzaSyBXkQvHwMcJIULuK0D0PI9vryAVscrqfFM","authDomain":"prototype-9c221.firebaseapp.com","databaseURL":"https://prototype-9c221.firebaseio.com","projectId":"prototype-9c221","storageBucket":"prototype-9c221.appspot.com","messagingSenderId":"954671244432"};
 
 firebase.initializeApp(config);
-
 
 const timestamp = firebase.database.ServerValue.TIMESTAMP;
 
@@ -169,37 +168,41 @@ const Auth = {
       (this[this.action] || (() => {}))();
     },
 
-    signIn() {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(this.email, this.password)
-        .catch(err => this.$emit('info', { type: 'error', text: err.message }));
+    async signIn() {
+      try {
+        await firebase.auth().signInWithEmailAndPassword(this.email, this.password);
+      } catch (err) {
+        this.$emit('info', { type: 'error', text: err.message });
+      }
     },
-    signUp() {
+    async signUp() {
       const profile = {
         displayName: this.name,
         photoURL: 'https://unsplash.it/300/?random',
       };
 
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(this.email, this.password)
-        .then(user => user.updateProfile(profile))
-        .catch(err => this.$emit('info', { type: 'error', text: err.message }));
+      try {
+        const user = await firebase.auth().createUserWithEmailAndPassword(this.email, this.password);
+        await user.updateProfile(profile);
+      } catch (err) {
+        this.$emit('info', { type: 'error', text: err.message });
+      }
     },
-    resetPassword() {
-      firebase
-        .auth()
-        .sendPasswordResetEmail(this.email)
-        .then(() => this.$emit('info', { type: 'success', text: `Email sent to ${this.email}` }))
-        .catch(err => this.$emit('info', { type: 'error', text: err.message }));
+    async resetPassword() {
+      try {
+        await firebase.auth().sendPasswordResetEmail(this.email);
+        this.$emit('info', { type: 'success', text: `Email sent to ${this.email}` });
+      } catch (err) {
+        this.$emit('info', { type: 'error', text: err.message });
+      }
     },
 
-    signOut() {
-      firebase
-        .auth()
-        .signOut()
-        .catch(err => this.$emit('info', { type: 'error', text: err.message }));
+    async signOut() {
+      try {
+        await firebase.auth().signOut();
+      } catch (err) {
+        this.$emit('info', { type: 'error', text: err.message });
+      }
     },
   },
 };

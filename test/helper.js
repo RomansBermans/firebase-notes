@@ -1,4 +1,4 @@
-/* */
+/* eslint-disable global-require, no-undef */
 
 
 if (typeof require === 'function') {
@@ -10,10 +10,7 @@ if (typeof require === 'function') {
 
 
 const helper = {
-  logout: () =>
-    firebase
-      .auth()
-      .signOut(),
+  logout: () => firebase.auth().signOut(),
   login: undefined,
   data: {
     timestamp: { '.sv': 'timestamp' },
@@ -21,27 +18,22 @@ const helper = {
 };
 
 
-helper.login = (email, password) => {
+helper.login = async (email, password) => {
+  let user;
+
+  await helper.logout();
+
   if (email && password) {
-    return helper.logout()
-      .then(() =>
-        firebase
-          .auth()
-          .signInWithEmailAndPassword(email, password),
-      )
-      .catch(() =>
-        firebase
-          .auth()
-          .createUserWithEmailAndPassword(email, password),
-      );
+    try {
+      user = await firebase.auth().signInWithEmailAndPassword(email, password);
+    } catch (err) {
+      user = await firebase.auth().createUserWithEmailAndPassword(email, password);
+    }
+  } else {
+    user = firebase.auth().signInAnonymously();
   }
 
-  return helper.logout()
-    .then(() =>
-      firebase
-        .auth()
-        .signInAnonymously(),
-    );
+  return user;
 };
 
 
