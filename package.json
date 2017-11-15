@@ -12,7 +12,7 @@
     "pretest:app": "node -e \"require('./init').deploy('database')\"",
     "test:app": "mocha test/app --reporter spec --ui bdd --slow 500 --timeout 10000 --exit",
 
-    "test:database": "mocha test/database --reporter spec --ui bdd --slow 50 --timeout 1000",
+    "test:database": "mocha test/database --reporter spec --ui bdd --slow 50 --timeout 1000 --exit",
 
     "pretest:storage": "node -e \"require('./init').deploy('storage')\" && babel test/helper.js test/storage/rules.es2017.js --out-file test/storage/rules.js",
     "test:storage": "phantomjs --web-security=no node_modules/mocha-phantomjs-core/mocha-phantomjs-core.js test/storage/index.html spec '{\"useColors\": true, \"ignoreResourceErrors\": true}'",

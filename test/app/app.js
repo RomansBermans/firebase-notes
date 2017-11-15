@@ -34,7 +34,7 @@ const test = {
       it(`- READ   ${path()}`, async () => {
         try {
           await database.ref(path()).once('value');
-          expect().fail();
+          expect.fail();
         } catch (err) {
           expect(err).to.exist;
         }
@@ -43,7 +43,7 @@ const test = {
       it(`- CREATE ${path()}`, async () => {
         try {
           await database.ref(path()).set(data());
-          expect().fail();
+          expect.fail();
         } catch (err) {
           expect(err).to.exist;
         }
@@ -52,7 +52,7 @@ const test = {
       it(`- UPDATE ${path()} \u2192 ${Object.keys(data()).join(', ')}`, async () => {
         try {
           await database.ref(path()).update(data());
-          expect().fail();
+          expect.fail();
         } catch (err) {
           expect(err).to.exist;
         }
@@ -61,7 +61,7 @@ const test = {
       it(`- DELETE ${path()}`, async () => {
         try {
           await database.ref(path()).remove();
-          expect().fail();
+          expect.fail();
         } catch (err) {
           expect(err).to.exist;
         }

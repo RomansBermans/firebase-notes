@@ -22,7 +22,7 @@ const test = {
       it(`- READ   ${path()}`, async () => {
         try {
           await storage.ref(path()).getDownloadURL();
-          expect().fail();
+          expect.fail();
         } catch (err) {
           expect(err.code).to.equal('storage/unauthorized');
         }
@@ -41,7 +41,7 @@ const test = {
       it(`- DELETE ${path()}`, async () => {
         try {
           await storage.ref(path()).delete();
-          expect().fail();
+          expect.fail();
         } catch (err) {
           expect(err.code).to.equal('storage/unauthorized');
         }
@@ -50,7 +50,7 @@ const test = {
       it(`- META   ${path()}`, async () => {
         try {
           await storage.ref(path()).updateMetadata(meta());
-          expect().fail();
+          expect.fail();
         } catch (err) {
           expect(err.code).to.equal('storage/unauthorized');
         }
