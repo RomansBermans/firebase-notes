@@ -113,6 +113,8 @@ describe(`test:app \u2192 ${config.databaseURL}`, () => {
     });
 
     describe('user:unauthenticated', () => {
+      user = { uid: null };
+
       before(async () => {
         await helper.logout();
         user = { uid: null };
@@ -129,6 +131,8 @@ describe(`test:app \u2192 ${config.databaseURL}`, () => {
     });
 
     describe('user:anonymous', () => {
+      user = { uid: 'u0' };
+
       before(async () => {
         user = await helper.login(null, null);
       });
@@ -155,6 +159,8 @@ describe(`test:app \u2192 ${config.databaseURL}`, () => {
     });
 
     describe('user:authenticated:0', () => {
+      user = { uid: 'u0' };
+
       before(async () => {
         user = await helper.login('u0@test.user.com', '123456789');
       });
@@ -181,6 +187,8 @@ describe(`test:app \u2192 ${config.databaseURL}`, () => {
     });
 
     describe('user:authenticated:1', () => {
+      user = { uid: 'u1' };
+
       before(async () => {
         user = await helper.login('u1@test.user.com', '123456789');
       });
@@ -230,6 +238,8 @@ describe(`test:app \u2192 ${config.databaseURL}`, () => {
     });
 
     describe('user:unauthenticated', () => {
+      user = { uid: null };
+
       before(async () => {
         await helper.logout();
         user = { uid: null };
@@ -242,6 +252,8 @@ describe(`test:app \u2192 ${config.databaseURL}`, () => {
     });
 
     describe('user:anonymous', () => {
+      user = { uid: 'u0' };
+
       before(async () => {
         user = await helper.login(null, null);
       });
@@ -257,6 +269,8 @@ describe(`test:app \u2192 ${config.databaseURL}`, () => {
     });
 
     describe('user:authenticated:0', () => {
+      user = { uid: 'u0' };
+
       before(async () => {
         user = await helper.login('u0@test.user.com', '123456789');
       });
@@ -272,6 +286,8 @@ describe(`test:app \u2192 ${config.databaseURL}`, () => {
     });
 
     describe('user:authenticated:1', () => {
+      user = { uid: 'u1' };
+
       before(async () => {
         user = await helper.login('u1@test.user.com', '123456789');
       });

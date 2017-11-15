@@ -116,6 +116,8 @@ describe(`test:storage \u2192 ${$config.storageBucket}`, () => {
     });
 
     describe('user:unauthenticated', () => {
+      user = { uid: null };
+
       before(async () => {
         await helper.logout();
         user = { uid: null };
@@ -132,6 +134,8 @@ describe(`test:storage \u2192 ${$config.storageBucket}`, () => {
     });
 
     describe('user:anonymous', () => {
+      user = { uid: 'u0' };
+
       before(async () => {
         user = await helper.login(null, null);
       });
@@ -158,6 +162,8 @@ describe(`test:storage \u2192 ${$config.storageBucket}`, () => {
     });
 
     describe('user:authenticated:0', () => {
+      user = { uid: 'u0' };
+
       before(async () => {
         user = await helper.login('u0@test.user.com', '123456789');
       });
@@ -184,6 +190,8 @@ describe(`test:storage \u2192 ${$config.storageBucket}`, () => {
     });
 
     describe('user:authenticated:1', () => {
+      user = { uid: 'u1' };
+
       before(async () => {
         user = await helper.login('u1@test.user.com', '123456789');
       });
@@ -237,6 +245,8 @@ describe(`test:storage \u2192 ${$config.storageBucket}`, () => {
     });
 
     describe('user:unauthenticated', () => {
+      user = { uid: null };
+
       before(async () => {
         await helper.logout();
         user = { uid: null };
@@ -249,6 +259,8 @@ describe(`test:storage \u2192 ${$config.storageBucket}`, () => {
     });
 
     describe('user:anonymous', () => {
+      user = { uid: 'u0' };
+
       before(async () => {
         user = await helper.login(null, null);
       });
@@ -264,6 +276,8 @@ describe(`test:storage \u2192 ${$config.storageBucket}`, () => {
     });
 
     describe('user:authenticated:0', () => {
+      user = { uid: 'u0' };
+
       before(async () => {
         user = await helper.login('u0@test.user.com', '123456789');
       });
@@ -279,6 +293,8 @@ describe(`test:storage \u2192 ${$config.storageBucket}`, () => {
     });
 
     describe('user:authenticated:1', () => {
+      user = { uid: 'u1' };
+
       before(async () => {
         user = await helper.login('u1@test.user.com', '123456789');
       });
