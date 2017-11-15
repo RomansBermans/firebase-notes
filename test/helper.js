@@ -1,7 +1,7 @@
 /* eslint-disable global-require, no-undef */
 
 
-if (typeof require === 'function') {
+if (typeof process !== 'undefined') {
   firebase = require('firebase');
 }
 
