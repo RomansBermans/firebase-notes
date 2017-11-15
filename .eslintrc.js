@@ -5,5 +5,5 @@ module.exports = {
     'arrow-parens': ['error', 'as-needed'],
     'function-paren-newline': 'off',
     'max-len': [ 'error', 240 ],
-  }
-}
+  },
+};
