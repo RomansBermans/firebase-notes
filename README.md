@@ -28,7 +28,7 @@ npm start
 ```
 npm test
 ```
-<img width="1200" alt="firebase-notes-tests" src="https://cloud.githubusercontent.com/assets/358467/22717022/992c39ea-ed90-11e6-86bc-fe4d3526f90f.png">
+<img width="1200" alt="firebase-notes-tests" src="https://user-images.githubusercontent.com/358467/32831261-0f8040ca-c9f8-11e7-89c9-744e0f8ba9e2.png">
 
 ## Deploy
 
