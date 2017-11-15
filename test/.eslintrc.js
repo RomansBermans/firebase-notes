@@ -3,6 +3,7 @@ module.exports = {
     mocha: true,
   },
   rules: {
+    'global-require': 'off',
     'no-unused-expressions': 'off',
   }
 }

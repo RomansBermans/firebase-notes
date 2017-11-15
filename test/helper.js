@@ -1,4 +1,4 @@
-/* eslint-disable global-require, no-undef */
+/* eslint-disable no-undef */
 
 
 if (typeof process !== 'undefined') {
