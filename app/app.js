@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+/* */
 
 
 /* ********* CONFIGURE FIREBASE ********* */

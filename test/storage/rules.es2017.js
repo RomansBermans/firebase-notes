@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+/* */
 
 
 const { expect } = chai;
