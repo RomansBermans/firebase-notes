@@ -41,9 +41,6 @@ export PROJECT=FIREBASE-PROJECT-ID && npm run deploy
 #### Travis CI
 Add `[deploy]` to you git commit message.
 
-## Demo
-https://prototype-9c221.firebaseapp.com/
-
 ## Learn More
 
 [Firebase Bolt](https://github.com/firebase/bolt)
