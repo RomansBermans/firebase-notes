@@ -46,7 +46,7 @@
     "mocha": "^4.0.1",
     "mocha-phantomjs-core": "^2.1.2",
     "phantomjs-prebuilt": "^2.1.16",
-    "shelljs": "^0.7.8",
+    "shelljs": "^0.8.5",
     "targaryen": "^3.0.5"
   },
   "repository": {
