@@ -42,7 +42,7 @@
     "eslint-plugin-import": "^2.8.0",
     "firebase": "^4.6.2",
     "firebase-bolt": "^0.8.2",
-    "firebase-tools": "^12.8.1",
+    "firebase-tools": "^13.6.0",
     "mocha": "^10.2.0",
     "mocha-phantomjs-core": "^2.1.2",
     "phantomjs-prebuilt": "^2.1.16",
